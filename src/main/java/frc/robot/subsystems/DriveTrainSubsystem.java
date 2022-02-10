@@ -14,11 +14,11 @@ public class DriveTrainSubsystem extends SubsystemBase{
 
     // The motors on the left side of the drive.
     private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(
-        new CANSparkMax(DriveConstants.kLeftMotor1Port, MotorType.kBrushless), new CANSparkMax(DriveConstants.kLeftMotor2Port, MotorType.kBrushless));
+        new CANSparkMax(DriveConstants.kLeftMotor1Port, MotorType.kBrushless), new CANSparkMax(DriveConstants.kLeftMotor2Port, MotorType.kBrushless), new CANSparkMax(DriveConstants.kLeftMotor3Port, MotorType.kBrushless));
 
     // The motors on the right side of the drive.
     private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(
-        new CANSparkMax(DriveConstants.kRightMotor1Port, MotorType.kBrushless), new CANSparkMax(DriveConstants.kRightMotor2Port, MotorType.kBrushless));
+        new CANSparkMax(DriveConstants.kRightMotor1Port, MotorType.kBrushless), new CANSparkMax(DriveConstants.kRightMotor2Port, MotorType.kBrushless), new CANSparkMax(DriveConstants.kRightMotor3Port, MotorType.kBrushless));
 
     // The robot's drive
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
