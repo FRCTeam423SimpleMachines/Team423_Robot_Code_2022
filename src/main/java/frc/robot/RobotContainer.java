@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
 import frc.robot.commands.ExampleCommand;
@@ -64,6 +66,16 @@ public class RobotContainer {
 
     // Put the chooser on the dashboard
     Shuffleboard.getTab("Autonomous").add(m_chooser);
+    
+    // Add Info Graphs on the dashboard
+    ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
+    driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
+
+    // Put both encoders in a list layout
+    //ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
+    //encoders.add("Left Encoder", m_leftEncoder);
+    //encoders.add("Right Encoder", m_rightEncoder);
+
 
   }
 
