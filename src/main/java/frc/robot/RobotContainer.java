@@ -72,9 +72,9 @@ public class RobotContainer {
     driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
 
     // Put both encoders in a list layout
-    //ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
-    //encoders.add("Left Encoder", m_leftEncoder);
-    //encoders.add("Right Encoder", m_rightEncoder);
+    ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
+    encoders.add("Left Encoder", m_driveTrainSubsystem.getLeftEncoderDistance());
+    encoders.add("Right Encoder", m_driveTrainSubsystem.getRightEncoderDistance());
 
 
   }
