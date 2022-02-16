@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -91,5 +92,38 @@ public class DriveTrainSubsystem extends SubsystemBase{
         m_drive.setMaxOutput(maxOutput);
     }
 
+    public void logToDashboard() {
+      // SmartDashboard.putBoolean("Turn Dampening", getTurnDampening());
+      //SmartDashboard.putNumber("Drive/Gyro Angle", getGyroAngle());
+      //SmartDashboard.putNumber("Drive/Gyro Pitch", getGyroPitch());
+      //SmartDashboard.putNumber("Drive/Left Motors Speed Percent", getLeftDriveSpeedPercent());
+      //SmartDashboard.putNumber("Drive/Right Motors Speed Percent", getRightDriveSpeedPercent());
+      //SmartDashboard.putNumber("Drive/Degree Rotation From Start", getRotationInDegrees());
+      //SmartDashboard.putNumber("Drive/Translation On X Since Start", getTranslationX());
+      //SmartDashboard.putNumber("Drive/Translation on Y Since Start", getTranslationY());
+      SmartDashboard.putNumber("Drive/Left Wheel Speed in Inches per Second", m_encoderL.getVelocity());
+      SmartDashboard.putNumber("Drive/Right Wheel Speed in Inches per Second", m_encoderR.getVelocity());
+      SmartDashboard.putNumber("Drive/Left Wheel Distance in Inches", m_encoderL.getPosition());
+      SmartDashboard.putNumber("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
+      //SmartDashboard.putNumber("Drive/X Translation", mOdometry.getPoseMeters().getTranslation().getX());
+      //SmartDashboard.putNumber("Drive/Y Translation", mOdometry.getPoseMeters().getTranslation().getY());
+      //SmartDashboard.putNumber("Drive/Pose Angle", mOdometry.getPoseMeters().getRotation().getDegrees());
+    }
+  
+    @Override
+    public void periodic() {
+      // This method will be called once per scheduler run
+  
+      // TODO extract it to its own command, then call that wherever
+      //These methods define movement according to tank and arcade drive systems as allowed for by the differential drive object. 
+      // mDifferentialDrive.arcadeDrive(RobotContainer.mDriverController.getY(Hand.kLeft), RobotContainer.mDriverController.getX(Hand.kRight), false);
+    
+      //mOdometry.update(getHeading(), getLeftDistanceMeters(), getRightDistanceMeters());
+      //mInvertedOdometry.update(getHeading(), -1.0 * getRightDistanceMeters(), -1.0 * getLeftDistanceMeters());
+  
+      // mOdometry.update(getHeading(), getDifferentialDriveSpeed());
+      // mInvertedOdometry.update(getHeading(), getInvertedDifferentialDriveSpeed());
+      logToDashboard();
+    }
 
 }
