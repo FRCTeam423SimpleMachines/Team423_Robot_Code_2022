@@ -8,7 +8,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.SerialPort;
 
 import frc.robot.Constants.DriveConstants;
@@ -65,6 +68,44 @@ public class DriveTrainSubsystem extends SubsystemBase{
     }
     
     /**
+   * Attempts to follow the given drive states using offboard PID.
+   *
+   * @param left The left wheel state.
+   * @param right The right wheel state.
+   */
+  public void setDriveStates(TrapezoidProfile.State left, TrapezoidProfile.State right) {
+    /*leftMotor2.setSetpoint(
+        leftMotor2.PIDMode.kPosition,
+        left.position,
+        m_feedforward.calculate(left.velocity));
+    rightMotor2.setSetpoint(
+        ExampleSmartMotorController.PIDMode.kPosition,
+        right.position,
+        m_feedforward.calculate(right.velocity));*/
+
+    SparkMaxPIDController leftPIDController = leftMotor2.getPIDController();
+    SparkMaxPIDController rightPIDController = rightMotor2.getPIDController();
+
+    //leftPIDController.setP(5e-5);
+
+    //leftPIDController.setI(1e-6);
+
+
+    leftPIDController.setFF(0.0005);
+    rightPIDController.setFF(0.0005);
+
+    leftPIDController.setSmartMotionMaxVelocity(2000, 0);
+    leftPIDController.setSmartMotionMaxAccel(1500, 0);
+    rightPIDController.setSmartMotionMaxVelocity(2000, 0);
+    rightPIDController.setSmartMotionMaxAccel(1500, 0);
+    
+    leftPIDController.setReference(left.position, CANSparkMax.ControlType.kSmartMotion);
+    rightPIDController.setReference(-right.position, CANSparkMax.ControlType.kSmartMotion);
+    
+
+  }
+
+    /**
    * Returns the left encoder distance.
    *
    * @return the left encoder distance
@@ -92,6 +133,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
   public void resetGyro() {
     mGyro.reset();  
   }
+
+  //Drives a distance
+  
 
      /**
      * Sets the max output of the drive. Useful for scaling the drive to drive more
