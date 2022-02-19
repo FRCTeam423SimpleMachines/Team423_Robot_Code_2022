@@ -14,6 +14,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -48,11 +49,13 @@ public class RobotContainer {
   Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
   Joystick m_driverController2 = new Joystick(OIConstants.kDriverControllerPort2);
   
+  
 
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    
     // Configure the button bindings
     configureButtonBindings();
 
@@ -89,8 +92,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      new JoystickButton(m_driverController, 5).whenPressed(new RunCommand(()
+      new JoystickButton(m_driverController, 5).whenPressed(new InstantCommand(()
         -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
+      new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
+        -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
   }
 
   /**

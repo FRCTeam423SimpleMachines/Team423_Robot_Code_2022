@@ -5,9 +5,11 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.SerialPort;
 
 import frc.robot.Constants.DriveConstants;
 
@@ -35,12 +37,16 @@ public class DriveTrainSubsystem extends SubsystemBase{
     private RelativeEncoder m_encoderL = leftMotor2.getEncoder();
     private RelativeEncoder m_encoderR = rightMotor2.getEncoder();
 
+    private AHRS mGyro;
+
     /** Creates a new DriveSubsystem. */
     public DriveTrainSubsystem() {
         // We need to invert one side of the drivetrain so that positive voltages
         // result in both sides moving forward. Depending on how your robot's
         // gearbox is constructed, you might have to invert the left side instead.
         m_rightMotors.setInverted(true);
+
+        mGyro = new AHRS(SerialPort.Port.kMXP);
 
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -82,6 +88,11 @@ public class DriveTrainSubsystem extends SubsystemBase{
     m_encoderR.setPosition(0.0);
   }
 
+  //Resets the Gyro
+  public void resetGyro() {
+    mGyro.reset();  
+  }
+
      /**
      * Sets the max output of the drive. Useful for scaling the drive to drive more
      * slowly.
@@ -94,8 +105,10 @@ public class DriveTrainSubsystem extends SubsystemBase{
 
     public void logToDashboard() {
       // SmartDashboard.putBoolean("Turn Dampening", getTurnDampening());
-      //SmartDashboard.putNumber("Drive/Gyro Angle", getGyroAngle());
-      //SmartDashboard.putNumber("Drive/Gyro Pitch", getGyroPitch());
+      SmartDashboard.putNumber("Drive/Gyro Angle", mGyro.getAngle());
+      SmartDashboard.putNumber("Drive/Gyro Pitch", mGyro.getPitch());
+      SmartDashboard.putNumber("Drive/Gyro Roll", mGyro.getRoll());
+      SmartDashboard.putBoolean("Drive/Gyro Connected", mGyro.isConnected());
       //SmartDashboard.putNumber("Drive/Left Motors Speed Percent", getLeftDriveSpeedPercent());
       //SmartDashboard.putNumber("Drive/Right Motors Speed Percent", getRightDriveSpeedPercent());
       //SmartDashboard.putNumber("Drive/Degree Rotation From Start", getRotationInDegrees());
@@ -114,7 +127,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
     public void periodic() {
       // This method will be called once per scheduler run
   
-      // TODO extract it to its own command, then call that wherever
+      // TOO extract it to its own command, then call that wherever
       //These methods define movement according to tank and arcade drive systems as allowed for by the differential drive object. 
       // mDifferentialDrive.arcadeDrive(RobotContainer.mDriverController.getY(Hand.kLeft), RobotContainer.mDriverController.getX(Hand.kRight), false);
     
