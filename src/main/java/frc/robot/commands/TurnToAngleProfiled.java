@@ -31,7 +31,7 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
    * @param drive              The drive subsystem to use
    */
 
-   
+  DriveTrainSubsystem m_drive;
   private int count = 0;
   public TurnToAngleProfiled(double targetAngleDegrees, DriveTrainSubsystem drive) {
 
@@ -50,11 +50,13 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        (output, setpoint) -> drive.getDifferentialDrive().arcadeDrive(0, NotMath.minmax(-Math.signum(output)*Math.max(Math.abs(output), 0.154), -1.0, 1.0)),
+        (output, setpoint) -> drive.getDifferentialDrive().arcadeDrive(0, NotMath.minmax(Math.signum(output)*Math.max(Math.abs(output), 0.154), -1.0, 1.0)),
         
         // Require the drive
         drive
     );
+
+    m_drive = drive;
     // Set the controller to be continuous (because it is an angle controller)
     getController().enableContinuousInput(-180, 180);
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
@@ -68,23 +70,26 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
 
  @Override
  public void initialize() {
-   // TODO Auto-generated method stub
-   getController().reset(DriveTrainSubsystem.getInstance().getHeading().getDegrees());
-   double p = SmartDashboard.getNumber("TurnPID/P", Constants.DriveConstants.PROFILED_TURN_P);
-   double i = SmartDashboard.getNumber("TurnPID/I", Constants.DriveConstants.PROFILED_TURN_I);
-   double d = SmartDashboard.getNumber("TurnPID/D", Constants.DriveConstants.PROFILED_TURN_D);
-   getController().setPID(p, i, d);
+
+    // TODO Auto-generated method stub
+    getController().reset(m_drive.getHeading().getDegrees());
+    double p = SmartDashboard.getNumber("TurnPID/P", Constants.DriveConstants.PROFILED_TURN_P);
+    double i = SmartDashboard.getNumber("TurnPID/I", Constants.DriveConstants.PROFILED_TURN_I);
+    double d = SmartDashboard.getNumber("TurnPID/D", Constants.DriveConstants.PROFILED_TURN_D);
+    getController().setPID(p, i, d);
+
+    m_drive.resetGyro();
+    count = 0;
+    super.initialize();
    
-  count = 0;
-    DriveTrainSubsystem.getInstance().resetGyro();
-   super.initialize();
+
  }
 
   @Override
   public void end(boolean interrupted) {
     // TODO Auto-generated method stub
     super.end(interrupted);
-    DriveTrainSubsystem.getInstance().setSpeed(0.0, 0.0);
+    m_drive.setSpeed(0.0, 0.0);
   }
 
   @Override
@@ -94,8 +99,8 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
     SmartDashboard.putNumber("TurnPID/VelError", getController().getVelocityError());
     SmartDashboard.putNumber("TurnPID/Goal", getController().getGoal().position);
     SmartDashboard.putNumber("TurnPID/Setpoint", getController().getSetpoint().position);
-    SmartDashboard.putNumber("TurnPID/Supplied Angle", DriveTrainSubsystem.getInstance().getHeading().getDegrees());
-    SmartDashboard.putNumber("TurnPID/Output", getController().calculate(DriveTrainSubsystem.getInstance().getHeading().getDegrees()));
+    SmartDashboard.putNumber("TurnPID/Supplied Angle", m_drive.getHeading().getDegrees());
+    SmartDashboard.putNumber("TurnPID/Output", getController().calculate(m_drive.getHeading().getDegrees()));
     SmartDashboard.putNumber("TurnPID/Count", count);
     
     if (getController().atGoal()) {

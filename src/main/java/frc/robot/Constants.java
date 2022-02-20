@@ -36,10 +36,11 @@ public final class Constants {
 
         public static final double MAX_TURN_RATE_DEG_PER_S = 100;
         public static final double MAX_TURN_ACCELERATION_DEG_PER_S_SQUARED = 300;
-
-        public static final double PROFILED_TURN_P = 0.0175;
+        
+        //Values will need to be adjusted
+        public static final double PROFILED_TURN_P = 0.1;
         public static final double PROFILED_TURN_I = 0.0;
-        public static final double PROFILED_TURN_D = 0.0009;
+        public static final double PROFILED_TURN_D = 0.009;
       }
 
     public static final class AutoConstants {

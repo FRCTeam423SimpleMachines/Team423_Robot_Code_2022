@@ -18,14 +18,6 @@ import frc.robot.Constants.DriveConstants;
 
 public class DriveTrainSubsystem extends SubsystemBase{
 
-  private static DriveTrainSubsystem instance = null;
-  public static DriveTrainSubsystem getInstance() {
-    if(instance == null) {
-      instance = new DriveTrainSubsystem();
-    }
-    return instance;
-  }
-
     private final CANSparkMax leftMotor1 = new CANSparkMax(DriveConstants.kLeftMotor1Port, MotorType.kBrushless);
     private final CANSparkMax leftMotor2 = new CANSparkMax(DriveConstants.kLeftMotor2Port, MotorType.kBrushless);
     private final CANSparkMax leftMotor3 = new CANSparkMax(DriveConstants.kLeftMotor3Port, MotorType.kBrushless);
