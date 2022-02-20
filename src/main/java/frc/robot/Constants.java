@@ -30,6 +30,16 @@ public final class Constants {
         public static final double kEncoderDistancePerPulse =
             // Assumes the encoders are directly mounted on the wheel shafts
             (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
+
+        public static final double TURN_TOLERANCE_DEG = 5;
+        public static final double TURN_RATE_TOLERANCE_DEG_PER_S = 10; // degrees per second  
+
+        public static final double MAX_TURN_RATE_DEG_PER_S = 100;
+        public static final double MAX_TURN_ACCELERATION_DEG_PER_S_SQUARED = 300;
+
+        public static final double PROFILED_TURN_P = 0.0175;
+        public static final double PROFILED_TURN_I = 0.0;
+        public static final double PROFILED_TURN_D = 0.0009;
       }
 
     public static final class AutoConstants {
