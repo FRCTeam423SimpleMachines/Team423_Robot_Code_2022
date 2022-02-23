@@ -13,7 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.SerialPort;
-
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 
@@ -40,6 +40,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
     private RelativeEncoder m_encoderL = leftMotor2.getEncoder();
     private RelativeEncoder m_encoderR = rightMotor2.getEncoder();
 
+
     private AHRS mGyro;
 
     /** Creates a new DriveSubsystem. */
@@ -50,6 +51,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
         m_rightMotors.setInverted(true);
 
         mGyro = new AHRS(SerialPort.Port.kMXP);
+
+        leftMotor2.getEncoder().setVelocityConversionFactor(4*Math.PI/60);
+        rightMotor2.getEncoder().setVelocityConversionFactor(4*Math.PI/60);
 
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -123,6 +127,22 @@ public class DriveTrainSubsystem extends SubsystemBase{
     return m_encoderR.getPosition();
   }
 
+<<<<<<< Updated upstream
+=======
+  public double getAvrageEncoderDistance() {
+    return (getLeftEncoderDistance()+getRightEncoderDistance()/2);
+  }
+
+  public Rotation2d getHeading() {
+    return Rotation2d.fromDegrees(mGyro.getAngle());
+  }
+
+  public void setSpeed(final double leftSpeed, final double rightSpeed) {
+    m_leftMotors.set(leftSpeed);
+    m_rightMotors.set(rightSpeed);
+  }
+
+>>>>>>> Stashed changes
   /** Resets the drive encoders. */
   public void resetEncoders() {
     m_encoderL.setPosition(0.0);
@@ -162,6 +182,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("Drive/Right Wheel Speed in Inches per Second", m_encoderR.getVelocity());
       SmartDashboard.putNumber("Drive/Left Wheel Distance in Inches", m_encoderL.getPosition());
       SmartDashboard.putNumber("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
+      SmartDashboard.putNumber("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
       //SmartDashboard.putNumber("Drive/X Translation", mOdometry.getPoseMeters().getTranslation().getX());
       //SmartDashboard.putNumber("Drive/Y Translation", mOdometry.getPoseMeters().getTranslation().getY());
       //SmartDashboard.putNumber("Drive/Pose Angle", mOdometry.getPoseMeters().getRotation().getDegrees());
