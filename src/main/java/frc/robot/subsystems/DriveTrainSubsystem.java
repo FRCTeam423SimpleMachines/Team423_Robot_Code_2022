@@ -127,8 +127,6 @@ public class DriveTrainSubsystem extends SubsystemBase{
     return m_encoderR.getPosition();
   }
 
-<<<<<<< Updated upstream
-=======
   public double getAvrageEncoderDistance() {
     return (getLeftEncoderDistance()+getRightEncoderDistance()/2);
   }
@@ -142,7 +140,6 @@ public class DriveTrainSubsystem extends SubsystemBase{
     m_rightMotors.set(rightSpeed);
   }
 
->>>>>>> Stashed changes
   /** Resets the drive encoders. */
   public void resetEncoders() {
     m_encoderL.setPosition(0.0);
