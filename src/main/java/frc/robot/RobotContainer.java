@@ -13,6 +13,7 @@ import frc.robot.Constants.*;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -29,6 +30,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DriveTrainSubsystem m_driveTrainSubsystem = new DriveTrainSubsystem();
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
@@ -63,6 +65,9 @@ public class RobotContainer {
     // hand, and turning controlled by the right.
     m_driveTrainSubsystem.setDefaultCommand(
       new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(m_driverController.getY(), m_driverController.getZ() ), m_driveTrainSubsystem)
+    );
+    m_shooterSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
     );
 
     // Add commands to the autonomous command chooser

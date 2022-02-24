@@ -32,6 +32,10 @@ public final class Constants {
             (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
       }
 
+    public static final class ShooterConstants {
+        public static final int kShooterMotorPort = 7;
+    }
+
     public static final class AutoConstants {
         public static final double kAutoDriveDistanceInches = 60;
         public static final double kAutoBackupDistanceInches = 20;
