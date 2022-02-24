@@ -9,6 +9,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SerialPort;
 
 import frc.robot.Constants.DriveConstants;
@@ -63,7 +65,11 @@ public class DriveTrainSubsystem extends SubsystemBase{
     public void arcadeDrive(double fwd, double rot) {
         m_drive.arcadeDrive(fwd, rot);
     }
-    
+   
+    public DifferentialDrive getDifferentialDrive() {
+      return m_drive;
+    }
+
     /**
    * Returns the left encoder distance.
    *
@@ -80,6 +86,15 @@ public class DriveTrainSubsystem extends SubsystemBase{
    */
   public double getRightEncoderDistance() {
     return m_encoderR.getPosition();
+  }
+
+  public Rotation2d getHeading() {
+    return Rotation2d.fromDegrees(mGyro.getAngle());
+  }
+
+  public void setSpeed(final double leftSpeed, final double rightSpeed) {
+    m_leftMotors.set(leftSpeed);
+    m_rightMotors.set(rightSpeed);
   }
 
   /** Resets the drive encoders. */
