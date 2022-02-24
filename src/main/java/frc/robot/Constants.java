@@ -27,24 +27,20 @@ public final class Constants {
     
         public static final int kEncoderCPR = 42;
         public static final double kWheelDiameterInches = 4;
+        public static final double kWheelGearRatio = 10.7;
         public static final double kEncoderDistancePerPulse =
-            // Assumes the encoders are directly mounted on the wheel shafts
-            (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
+            (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR /(double) kWheelGearRatio;
 
-<<<<<<< Updated upstream
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-=======
         public static final double TURN_TOLERANCE_DEG = 5;
         public static final double TURN_RATE_TOLERANCE_DEG_PER_S = 10; // degrees per second  
 
         public static final double MAX_TURN_RATE_DEG_PER_S = 100;
         public static final double MAX_TURN_ACCELERATION_DEG_PER_S_SQUARED = 300;
 
-        public static final double DRIVE_TOLERANCE_IN = 2;
-        public static final double DRIVE_RATE_TOLERANCE_IN_PER_S = 4; // degrees per second  
+        public static final double DRIVE_TOLERANCE_IN = 1;
+        public static final double DRIVE_RATE_TOLERANCE_IN_PER_S = 4; // inches per second  
 
-        public static final double MAX_DRIVE_RATE_IN_PER_S = 5700;
+        public static final double MAX_DRIVE_RATE_IN_PER_S = 2700;
         public static final double MAX_DRIVE_ACCELERATION_IN_PER_S_SQUARED = 300;
         
         //Values will need to be adjusted
@@ -55,7 +51,6 @@ public final class Constants {
         public static final double PROFILED_DRIVE_P = 0.05;
         public static final double PROFILED_DRIVE_I = 0.0;
         public static final double PROFILED_DRIVE_D = 0.009;
->>>>>>> Stashed changes
       }
 
     public static final class AutoConstants {

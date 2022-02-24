@@ -11,9 +11,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.SerialPort;
-import frc.robot.Constants;
+
 import frc.robot.Constants.DriveConstants;
 
 
@@ -52,8 +53,10 @@ public class DriveTrainSubsystem extends SubsystemBase{
 
         mGyro = new AHRS(SerialPort.Port.kMXP);
 
-        leftMotor2.getEncoder().setVelocityConversionFactor(4*Math.PI/60);
-        rightMotor2.getEncoder().setVelocityConversionFactor(4*Math.PI/60);
+        leftMotor2.getEncoder().setVelocityConversionFactor(4*Math.PI/10.7);
+        rightMotor2.getEncoder().setVelocityConversionFactor(4*Math.PI/10.7);
+        leftMotor2.getEncoder().setPositionConversionFactor(4*Math.PI/10.7);
+        rightMotor2.getEncoder().setPositionConversionFactor(4*Math.PI/10.7);
 
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -69,6 +72,10 @@ public class DriveTrainSubsystem extends SubsystemBase{
      */
     public void arcadeDrive(double fwd, double rot) {
         m_drive.arcadeDrive(fwd, rot);
+    }
+
+    public DifferentialDrive getDifferentialDrive() {
+      return m_drive;
     }
     
     /**
@@ -128,7 +135,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
   }
 
   public double getAvrageEncoderDistance() {
-    return (getLeftEncoderDistance()+getRightEncoderDistance()/2);
+    return (getLeftEncoderDistance()-getRightEncoderDistance())/2;
   }
 
   public Rotation2d getHeading() {
