@@ -10,10 +10,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
-<<<<<<< Updated upstream
-import frc.robot.commands.DriveDistance;
-=======
->>>>>>> Stashed changes
 import frc.robot.commands.DriveDistanceProfiled;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
@@ -101,13 +97,9 @@ public class RobotContainer {
         -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
         -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
-<<<<<<< Updated upstream
-      new JoystickButton(m_driverController, 4).whenPressed(new DriveDistanceProfiled(1000, m_driveTrainSubsystem));
-=======
       new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(120.0, m_driveTrainSubsystem));
->>>>>>> Stashed changes
   }
 
   /**
