@@ -15,16 +15,20 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private RelativeEncoder shooterEncoder = shooterMotor.getEncoder();
 
+    private float maxSpeed;
+
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {}
 
-  public void SetShooterMaxSpeed() {
+  public void SetShooterMaxSpeed(float maxSpd) {
     shooterMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    shooterMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 10);
+    shooterMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) 5700.0*maxSpd);
+    maxSpeed = maxSpd;
+
   }
 
   public void RunShooter() {
-    shooterMotor.set(1.0);
+    shooterMotor.set(maxSpeed);
   }
 
   public void logToDashboard() {
