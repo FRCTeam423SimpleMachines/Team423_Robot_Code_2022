@@ -8,9 +8,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.SerialPort;
 
 import frc.robot.Constants.DriveConstants;
@@ -39,6 +41,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
     private RelativeEncoder m_encoderL = leftMotor2.getEncoder();
     private RelativeEncoder m_encoderR = rightMotor2.getEncoder();
 
+
     private AHRS mGyro;
 
     /** Creates a new DriveSubsystem. */
@@ -49,6 +52,14 @@ public class DriveTrainSubsystem extends SubsystemBase{
         m_rightMotors.setInverted(true);
 
         mGyro = new AHRS(SerialPort.Port.kMXP);
+
+        leftMotor2.getEncoder().setVelocityConversionFactor(4*Math.PI/10.7);
+        rightMotor2.getEncoder().setVelocityConversionFactor(4*Math.PI/10.7);
+        leftMotor2.getEncoder().setPositionConversionFactor(4*Math.PI/10.7);
+        rightMotor2.getEncoder().setPositionConversionFactor(4*Math.PI/10.7);
+
+        leftMotor2.burnFlash();
+        rightMotor2.burnFlash();
 
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -65,10 +76,52 @@ public class DriveTrainSubsystem extends SubsystemBase{
     public void arcadeDrive(double fwd, double rot) {
         m_drive.arcadeDrive(fwd, rot);
     }
-   
+
     public DifferentialDrive getDifferentialDrive() {
       return m_drive;
     }
+    
+    /**
+   * Attempts to follow the given drive states using offboard PID.
+   *
+   * @param left The left wheel state.
+   * @param right The right wheel state.
+   */
+  public void setDriveStates(TrapezoidProfile.State left, TrapezoidProfile.State right) {
+    /*leftMotor2.setSetpoint(
+        leftMotor2.PIDMode.kPosition,
+        left.position,
+        m_feedforward.calculate(left.velocity));
+    rightMotor2.setSetpoint(
+        ExampleSmartMotorController.PIDMode.kPosition,
+        right.position,
+        m_feedforward.calculate(right.velocity));*/
+
+    SparkMaxPIDController leftPIDController = leftMotor2.getPIDController();
+    SparkMaxPIDController rightPIDController = rightMotor2.getPIDController();
+
+    //leftPIDController.setP(5e-5);
+
+    //leftPIDController.setI(1e-6);
+
+
+    leftPIDController.setFF(0.0005);
+    rightPIDController.setFF(0.0005);
+
+    leftPIDController.setSmartMotionMaxVelocity(2000, 0);
+    leftPIDController.setSmartMotionMaxAccel(1500, 0);
+    rightPIDController.setSmartMotionMaxVelocity(2000, 0);
+    rightPIDController.setSmartMotionMaxAccel(1500, 0);
+    
+    leftPIDController.setReference(left.position, CANSparkMax.ControlType.kSmartMotion);
+    rightPIDController.setReference(-right.position, CANSparkMax.ControlType.kSmartMotion);
+    
+
+  }
+    public DifferentialDrive getDifferentialDrive() {
+      return m_drive;
+    }
+
 
     /**
    * Returns the left encoder distance.
@@ -87,6 +140,11 @@ public class DriveTrainSubsystem extends SubsystemBase{
   public double getRightEncoderDistance() {
     return m_encoderR.getPosition();
   }
+
+  public double getAvrageEncoderDistance() {
+    return -(getLeftEncoderDistance()-getRightEncoderDistance())/2;
+  }
+
 
   public Rotation2d getHeading() {
     return Rotation2d.fromDegrees(mGyro.getAngle());
@@ -107,6 +165,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
   public void resetGyro() {
     mGyro.reset();  
   }
+
+  //Drives a distance
+  
 
      /**
      * Sets the max output of the drive. Useful for scaling the drive to drive more
@@ -133,6 +194,8 @@ public class DriveTrainSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("Drive/Right Wheel Speed in Inches per Second", m_encoderR.getVelocity());
       SmartDashboard.putNumber("Drive/Left Wheel Distance in Inches", m_encoderL.getPosition());
       SmartDashboard.putNumber("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
+      SmartDashboard.putNumber("Drive/Left and Right Wheel Distance in Inches", getAvrageEncoderDistance());
+      SmartDashboard.putNumber("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
       //SmartDashboard.putNumber("Drive/X Translation", mOdometry.getPoseMeters().getTranslation().getX());
       //SmartDashboard.putNumber("Drive/Y Translation", mOdometry.getPoseMeters().getTranslation().getY());
       //SmartDashboard.putNumber("Drive/Pose Angle", mOdometry.getPoseMeters().getRotation().getDegrees());

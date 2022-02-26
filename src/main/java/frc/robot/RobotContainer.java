@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
+import frc.robot.commands.DriveDistanceProfiled;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveTrainSubsystem;
@@ -17,7 +18,6 @@ import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -97,6 +97,7 @@ public class RobotContainer {
         -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
         -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
+      new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0/(0.8), m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
   }
