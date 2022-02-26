@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,17 +13,16 @@ import frc.robot.Constants.TurretConstants;
 
 public class TurretSubsystem extends SubsystemBase {
   
-  private final WPI_TalonFX turretMotor = new WPI_TalonFX(TurretConstants.kTurretMotorPort);
+  private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.kTurretMotorPort, MotorType.kBrushless);
+  private RelativeEncoder turretEncoder = turretMotor.getEncoder();
   DigitalInput magLimitSwitch = new DigitalInput(0);
 
   /** Creates a new ExampleSubsystem. */
-  public TurretSubsystem() {
-    turretMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-  }
+  public TurretSubsystem() {}
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Turret/Turret Speed", turretMotor.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Turret/Turret Position", turretMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Turret/Turret Speed", turretEncoder.getVelocity());
+    SmartDashboard.putNumber("Turret/Turret Position", turretEncoder.getPosition());
   }
 
   @Override
@@ -29,7 +31,7 @@ public class TurretSubsystem extends SubsystemBase {
     logToDashboard();
 
     if (magLimitSwitch.get()) {
-      turretMotor.setSelectedSensorPosition(0.0);
+      turretEncoder.setPosition(0.0);
     }
   }
 
