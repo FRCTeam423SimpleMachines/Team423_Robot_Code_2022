@@ -31,6 +31,7 @@ public final class Constants {
         public static final double kEncoderDistancePerPulse =
             (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR /(double) kWheelGearRatio;
 
+
         public static final double TURN_TOLERANCE_DEG = 5;
         public static final double TURN_RATE_TOLERANCE_DEG_PER_S = 10; // degrees per second  
 
@@ -42,7 +43,7 @@ public final class Constants {
 
         public static final double MAX_DRIVE_RATE_IN_PER_S = 2700;
         public static final double MAX_DRIVE_ACCELERATION_IN_PER_S_SQUARED = 300;
-        
+
         //Values will need to be adjusted
         public static final double PROFILED_TURN_P = 0.1;
         public static final double PROFILED_TURN_I = 0.0;
@@ -51,6 +52,7 @@ public final class Constants {
         public static final double PROFILED_DRIVE_P = 0.1;
         public static final double PROFILED_DRIVE_I = 0.0;
         public static final double PROFILED_DRIVE_D = 0.009;
+
       }
 
     public static final class AutoConstants {

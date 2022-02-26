@@ -118,6 +118,10 @@ public class DriveTrainSubsystem extends SubsystemBase{
     
 
   }
+    public DifferentialDrive getDifferentialDrive() {
+      return m_drive;
+    }
+
 
     /**
    * Returns the left encoder distance.
@@ -140,6 +144,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
   public double getAvrageEncoderDistance() {
     return -(getLeftEncoderDistance()-getRightEncoderDistance())/2;
   }
+
 
   public Rotation2d getHeading() {
     return Rotation2d.fromDegrees(mGyro.getAngle());
