@@ -44,7 +44,9 @@ public final class Constants {
       }
 
     public static final class TurretConstants {
-        public static final int kTurretMotorPort = 10;
+        public static final int kTurretMotorPort = 21;
+
+        public static final int TURRET_GEAR_RATIO = 14;
     }
 
     public static final class AutoConstants {

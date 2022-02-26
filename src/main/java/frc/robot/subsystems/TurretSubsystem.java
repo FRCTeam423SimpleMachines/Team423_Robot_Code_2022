@@ -1,30 +1,36 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 
 public class TurretSubsystem extends SubsystemBase {
   
-  private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.kTurretMotorPort, MotorType.kBrushless);
-
-  private RelativeEncoder TurretEncoder = turretMotor.getEncoder();
+  private final WPI_TalonFX turretMotor = new WPI_TalonFX(TurretConstants.kTurretMotorPort);
+  DigitalInput magLimitSwitch = new DigitalInput(0);
 
   /** Creates a new ExampleSubsystem. */
-  public TurretSubsystem() {}
+  public TurretSubsystem() {
+    turretMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+  }
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Turret/Turret Position", TurretEncoder.getPosition());
+    SmartDashboard.putNumber("Turret/Turret Speed", turretMotor.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Turret/Turret Position", turretMotor.getSelectedSensorPosition());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     logToDashboard();
+
+    if (magLimitSwitch.get()) {
+      turretMotor.setSelectedSensorPosition(0.0);
+    }
   }
 
   @Override
