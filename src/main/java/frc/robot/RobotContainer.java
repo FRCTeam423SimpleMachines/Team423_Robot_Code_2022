@@ -12,11 +12,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
 import frc.robot.commands.DriveDistanceProfiled;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -72,7 +74,7 @@ public class RobotContainer {
     );
 
     // Add commands to the autonomous command chooser
-    //m_chooser.setDefaultOption("Simple Auto", m_simpleAuto);
+    m_chooser.setDefaultOption("Simple Auto", new SimpleAuton(m_driveTrainSubsystem));
     //m_chooser.addOption("Complex Auto", m_complexAuto);
 
     // Put the chooser on the dashboard
@@ -102,7 +104,7 @@ public class RobotContainer {
         -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
         -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0/(0.8), m_driveTrainSubsystem));
+      new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
   }
@@ -113,7 +115,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+
+    
+    //CommandScheduler.getInstance().clearButtons();
+
+    m_driveTrainSubsystem.resetEncoders();
+    m_driveTrainSubsystem.resetGyro();
+
+    return m_chooser.getSelected();
+
   }
 }

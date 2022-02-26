@@ -118,10 +118,6 @@ public class DriveTrainSubsystem extends SubsystemBase{
     
 
   }
-    public DifferentialDrive getDifferentialDrive() {
-      return m_drive;
-    }
-
 
     /**
    * Returns the left encoder distance.

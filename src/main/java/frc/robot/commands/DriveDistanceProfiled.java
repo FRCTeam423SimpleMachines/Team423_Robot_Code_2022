@@ -48,7 +48,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
         // Close loop on heading
         () -> drive.getAvrageEncoderDistance(),
         // Set reference to target
-        targetDistanceInches,
+        targetDistanceInches/0.8,
         // Pipe output to drive robot
         (output, setpoint) -> drive.getDifferentialDrive().arcadeDrive( NotMath.minmax(-output, -1.0, 1.0),0),
         
