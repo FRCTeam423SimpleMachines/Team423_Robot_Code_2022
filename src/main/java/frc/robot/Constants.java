@@ -42,6 +42,11 @@ public final class Constants {
         public static final double PROFILED_TURN_I = 0.0;
         public static final double PROFILED_TURN_D = 0.009;
       }
+    
+    public static final class IntakeConstants {
+        public static final int kIntakeMotorPort = 8;
+        public static final int kIntakeArmMotorPort = 9;
+    }
 
     public static final class AutoConstants {
         public static final double kAutoDriveDistanceInches = 60;
