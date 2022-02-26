@@ -18,7 +18,7 @@ public class TurretSubsystem extends SubsystemBase {
   public TurretSubsystem() {}
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Turret/Turret Angle", TurretEncoder.getPosition());
+    SmartDashboard.putNumber("Turret/Turret Position", TurretEncoder.getPosition());
   }
 
   @Override
