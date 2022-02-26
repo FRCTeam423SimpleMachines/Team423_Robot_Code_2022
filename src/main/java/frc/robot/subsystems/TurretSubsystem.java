@@ -17,13 +17,8 @@ public class TurretSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem() {}
 
-  public double getEncoderAngle(RelativeEncoder encoder) {
-    double encoderValue = encoder.getPosition();
-    return encoderValue*8.57142857143;
-  }
-
   public void logToDashboard() {
-    SmartDashboard.putNumber("Turret/Turret Angle", getEncoderAngle(TurretEncoder));
+    SmartDashboard.putNumber("Turret/Turret Angle", TurretEncoder.getPosition());
   }
 
   @Override
