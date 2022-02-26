@@ -50,7 +50,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
         // Set reference to target
         targetDistanceInches,
         // Pipe output to drive robot
-        (output, setpoint) -> drive.getDifferentialDrive().arcadeDrive( NotMath.minmax(Math.signum(output)*Math.max(Math.abs(output), 0.154), -1.0, 1.0),0),
+        (output, setpoint) -> drive.getDifferentialDrive().arcadeDrive( NotMath.minmax(-output, -1.0, 1.0),0),
         
         // Require the drive
         drive
@@ -58,7 +58,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
 
     m_drive = drive;
     // Set the controller to be continuous (because it is an angle controller)
-    //getController().enableContinuousInput(-180, 180);
+    //getController().enableContinuousInput(-100000, 100000);
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController().setTolerance(Constants.DriveConstants.DRIVE_TOLERANCE_IN, Constants.DriveConstants.DRIVE_RATE_TOLERANCE_IN_PER_S);
@@ -70,6 +70,9 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
 
  @Override
  public void initialize() {
+
+
+
 
     // TODO Auto-generated method stub
     getController().reset(m_drive.getAvrageEncoderDistance());
@@ -102,6 +105,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
     SmartDashboard.putNumber("DrivePID/Supplied Distance", m_drive.getAvrageEncoderDistance());
     SmartDashboard.putNumber("DrivePID/Output", getController().calculate(m_drive.getAvrageEncoderDistance()));
     SmartDashboard.putNumber("DrivePID/Count", count);
+    SmartDashboard.putBoolean("DrivePID/AtGoal", getController().atGoal());
     
     if (getController().atGoal()) {
       count++;

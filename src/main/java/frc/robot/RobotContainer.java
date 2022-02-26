@@ -96,7 +96,7 @@ public class RobotContainer {
         -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
         -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(-24.0, m_driveTrainSubsystem));
+      new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0/(0.8), m_driveTrainSubsystem));
   }
 
   /**

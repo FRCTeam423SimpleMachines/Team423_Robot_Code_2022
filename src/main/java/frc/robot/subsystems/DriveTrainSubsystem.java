@@ -58,6 +58,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
         leftMotor2.getEncoder().setPositionConversionFactor(4*Math.PI/10.7);
         rightMotor2.getEncoder().setPositionConversionFactor(4*Math.PI/10.7);
 
+        leftMotor2.burnFlash();
+        rightMotor2.burnFlash();
+
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
         //m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -135,7 +138,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
   }
 
   public double getAvrageEncoderDistance() {
-    return (getLeftEncoderDistance()-getRightEncoderDistance())/2;
+    return -(getLeftEncoderDistance()-getRightEncoderDistance())/2;
   }
 
   public Rotation2d getHeading() {
@@ -186,6 +189,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("Drive/Right Wheel Speed in Inches per Second", m_encoderR.getVelocity());
       SmartDashboard.putNumber("Drive/Left Wheel Distance in Inches", m_encoderL.getPosition());
       SmartDashboard.putNumber("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
+      SmartDashboard.putNumber("Drive/Left and Right Wheel Distance in Inches", getAvrageEncoderDistance());
       SmartDashboard.putNumber("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
       //SmartDashboard.putNumber("Drive/X Translation", mOdometry.getPoseMeters().getTranslation().getX());
       //SmartDashboard.putNumber("Drive/Y Translation", mOdometry.getPoseMeters().getTranslation().getY());
