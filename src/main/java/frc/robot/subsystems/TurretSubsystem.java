@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -20,9 +18,14 @@ public class TurretSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem() {}
 
+  public double getAngleFromEncoder(RelativeEncoder encoder) {
+    return encoder.getPosition()/TurretConstants.CPA;
+  }
+
   public void logToDashboard() {
     SmartDashboard.putNumber("Turret/Turret Speed", turretEncoder.getVelocity());
     SmartDashboard.putNumber("Turret/Turret Position", turretEncoder.getPosition());
+    SmartDashboard.putNumber("Turret/Turret Angle", getAngleFromEncoder(turretEncoder));
   }
 
   @Override

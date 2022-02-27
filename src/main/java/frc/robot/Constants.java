@@ -46,7 +46,10 @@ public final class Constants {
     public static final class TurretConstants {
         public static final int kTurretMotorPort = 21;
 
-        public static final int TURRET_GEAR_RATIO = 14;
+        public static final int TURRET_GEAR_RATIO = 560;
+        public static final int ENCODER_CLICKS = 42;
+        public static final int TOTAL_CPR = ENCODER_CLICKS*TURRET_GEAR_RATIO;
+        public static final double CPA = (double) TOTAL_CPR/360;
     }
 
     public static final class AutoConstants {
