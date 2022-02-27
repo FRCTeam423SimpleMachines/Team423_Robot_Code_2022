@@ -25,22 +25,34 @@ public final class Constants {
         public static final boolean kLeftEncoderReversed = false;
         public static final boolean kRightEncoderReversed = true;
     
-        public static final int kEncoderCPR = 1024;
-        public static final double kWheelDiameterInches = 6;
+        public static final int kEncoderCPR = 42;
+        public static final double kWheelDiameterInches = 4;
+        public static final double kWheelGearRatio = 10.7;
         public static final double kEncoderDistancePerPulse =
-            // Assumes the encoders are directly mounted on the wheel shafts
-            (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
+            (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR /(double) kWheelGearRatio;
+
 
         public static final double TURN_TOLERANCE_DEG = 5;
         public static final double TURN_RATE_TOLERANCE_DEG_PER_S = 10; // degrees per second  
 
         public static final double MAX_TURN_RATE_DEG_PER_S = 100;
         public static final double MAX_TURN_ACCELERATION_DEG_PER_S_SQUARED = 300;
-        
+
+        public static final double DRIVE_TOLERANCE_IN = 2;
+        public static final double DRIVE_RATE_TOLERANCE_IN_PER_S = 4; // inches per second  
+
+        public static final double MAX_DRIVE_RATE_IN_PER_S = 2700;
+        public static final double MAX_DRIVE_ACCELERATION_IN_PER_S_SQUARED = 300;
+
         //Values will need to be adjusted
         public static final double PROFILED_TURN_P = 0.1;
         public static final double PROFILED_TURN_I = 0.0;
         public static final double PROFILED_TURN_D = 0.009;
+
+        public static final double PROFILED_DRIVE_P = 0.1;
+        public static final double PROFILED_DRIVE_I = 0.0;
+        public static final double PROFILED_DRIVE_D = 0.009;
+
       }
 
     public static final class TurretConstants {
@@ -50,6 +62,11 @@ public final class Constants {
         public static final int ENCODER_CLICKS = 42;
         public static final int TOTAL_CLICKS_PER_ROTAION = ENCODER_CLICKS*TURRET_GEAR_RATIO;
         public static final double CLICKS_PER_DEGREE = (double) TOTAL_CLICKS_PER_ROTAION/360;
+    }
+  
+      public static final class ShooterConstants {
+        public static final int kShooterMotorPort = 20;
+
     }
 
     public static final class AutoConstants {
