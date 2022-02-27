@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -16,18 +17,26 @@ public class IntakeSubsystem extends SubsystemBase {
   private RelativeEncoder IntakeEncoder = intakeMotor.getEncoder();
   private RelativeEncoder IntakeArmEncoder = intakeArmMotor.getEncoder();
 
+  DigitalInput intakeTop = new DigitalInput(3);
+  DigitalInput intakeBottom = new DigitalInput(4);
+
   /** Creates a new ExampleSubsystem. */
   public IntakeSubsystem() {}
 
   public void intakeUp() {
-    intakeArmMotor.set(0.5);
+    while (!intakeTop.get()) {
+      intakeArmMotor.set(0.8);
+    }
+    intakeArmMotor.set(0.0);
     intakeMotor.set(0.0);
   }
 
   public void intakeDown() {
-    intakeArmMotor.set(-0.5);
-    intakeMotor.set(1.0);
-    
+    while (!intakeBottom.get()) {
+      intakeArmMotor.set(-0.8);
+    }
+    intakeArmMotor.set(0.0);
+    intakeMotor.set(1.0); 
   }
 
   public void logToDashboard() {
