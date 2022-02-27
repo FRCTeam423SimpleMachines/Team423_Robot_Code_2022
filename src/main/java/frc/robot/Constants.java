@@ -48,8 +48,8 @@ public final class Constants {
 
         public static final int TURRET_GEAR_RATIO = 560;
         public static final int ENCODER_CLICKS = 42;
-        public static final int TOTAL_CPR = ENCODER_CLICKS*TURRET_GEAR_RATIO;
-        public static final double CPA = (double) TOTAL_CPR/360;
+        public static final int TOTAL_CLICKS_PER_ROTAION = ENCODER_CLICKS*TURRET_GEAR_RATIO;
+        public static final double CLICKS_PER_DEGREE = (double) TOTAL_CLICKS_PER_ROTAION/360;
     }
 
     public static final class AutoConstants {
