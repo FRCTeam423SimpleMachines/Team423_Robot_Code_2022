@@ -19,7 +19,7 @@ public class TurretSubsystem extends SubsystemBase {
   public TurretSubsystem() {}
 
   public double getAngleFromEncoder(RelativeEncoder encoder) {
-    return encoder.getPosition()/TurretConstants.CPA;
+    return encoder.getPosition()/TurretConstants.CLICKS_PER_DEGREE;
   }
 
   public void logToDashboard() {
