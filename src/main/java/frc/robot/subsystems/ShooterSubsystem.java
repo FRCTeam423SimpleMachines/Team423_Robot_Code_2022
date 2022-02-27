@@ -1,28 +1,24 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.CAN;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final CANSparkMax shooterMotor = new CANSparkMax(ShooterConstants.kShooterMotorPort, MotorType.kBrushless);
+    private final WPI_TalonFX shooterMotor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
 
-    private RelativeEncoder shooterEncoder = shooterMotor.getEncoder();
-
-    private float maxSpeed;
+    private double maxSpeed;
 
   /** Creates a new ShooterSubsystem. */
-  public ShooterSubsystem() {}
+  public ShooterSubsystem() {
+    shooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+  }
 
-  public void SetShooterMaxSpeed(float maxSpd) {
-    shooterMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    shooterMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) 5700.0*maxSpd);
+  public void SetShooterMaxSpeed(double maxSpd) {
+    shooterMotor.configPeakOutputForward(maxSpd);
     maxSpeed = maxSpd;
 
   }
@@ -32,7 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Shooter/Shooter Speed", shooterEncoder.getVelocity());
+    SmartDashboard.putNumber("Shooter/Shooter Speed", shooterMotor.getSelectedSensorVelocity());
   }  
 
   @Override
