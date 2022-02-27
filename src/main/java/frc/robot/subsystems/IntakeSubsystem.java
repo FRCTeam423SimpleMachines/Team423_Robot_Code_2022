@@ -19,9 +19,20 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public IntakeSubsystem() {}
 
+  public void intakeUp() {
+    intakeArmMotor.set(0.5);
+    intakeMotor.set(0.0);
+  }
+
+  public void intakeDown() {
+    intakeArmMotor.set(-0.5);
+    intakeMotor.set(1.0);
+    
+  }
+
   public void logToDashboard() {
     SmartDashboard.putNumber("Intake/Intake Speed", IntakeEncoder.getVelocity());
-    SmartDashboard.putNumber("Intake/Intake Arm Position", IntakeEncoder.getPosition());
+    SmartDashboard.putNumber("Intake/Intake Arm Position", IntakeArmEncoder.getPosition());
   }
 
   @Override
