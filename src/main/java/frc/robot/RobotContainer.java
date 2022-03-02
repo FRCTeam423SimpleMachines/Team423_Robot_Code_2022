@@ -63,7 +63,7 @@ public class RobotContainer {
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
     m_driveTrainSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(m_driverController.getY(), m_driverController.getZ() ), m_driveTrainSubsystem)
+      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(deadbandJoystick(m_driverController.getY()), deadbandJoystick(m_driverController.getZ()) ), m_driveTrainSubsystem)
     );
     m_shooterSubsystem.setDefaultCommand(
       new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
@@ -87,6 +87,11 @@ public class RobotContainer {
 
 
   }
+
+  public double deadbandJoystick(double input) {
+    if(Math.abs(input) < Constants.OIConstants.kDeadband) return 0;
+    else return input;
+}
 
   
   /**
