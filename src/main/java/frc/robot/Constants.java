@@ -66,6 +66,9 @@ public final class Constants {
   
       public static final class ShooterConstants {
         public static final int kShooterMotorPort = 20;
+        public static final double kShooterAngle = 60; // 60 degrees
+        public static final double kShooterHeight = 46; //46 Inches off the ground
+        public static final double kShooterEfficiency = 0.7; // Assuming 70% efficiency
 
     }
 

@@ -23,6 +23,20 @@ public class ShooterSubsystem extends SubsystemBase {
 
   }
 
+  public double GetShooterSpeedAtDistance(double distance){
+
+    double theta = ShooterConstants.kShooterAngle;
+    double x = distance;
+    double y0 = ShooterConstants.kShooterHeight;
+    double k = 1.0/ShooterConstants.kShooterEfficiency;
+
+    return k*8*Math.pow(3,0.5)*Math.pow(-1/(Math.cos((Math.PI*theta)/180)*(36*Math.sin((Math.PI*theta)/180) - 104*Math.cos((Math.PI*theta)/180) + y0*Math.cos((Math.PI*theta)/180) + x*Math.sin((Math.PI*theta)/180))),0.5)*(x + 36);
+  }
+
+  public void RunShooterControlled(){
+    
+  }
+
   public void RunShooter() {
     shooterMotor.set(maxSpeed);
   }
