@@ -15,6 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     shooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+
   }
 
   public void SetShooterMaxSpeed(double maxSpd) {
@@ -34,7 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void RunShooterControlled(){
-    
+
   }
 
   public void RunShooter() {
@@ -42,7 +43,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Shooter/Shooter Speed", shooterMotor.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Shooter/Shooter Speed (RPM)", shooterMotor.getSelectedSensorVelocity()/ShooterConstants.kencoderCPR);
+    SmartDashboard.putNumber("Shooter/Shooter Max Speed", maxSpeed);
+    
+    
   }  
 
   @Override

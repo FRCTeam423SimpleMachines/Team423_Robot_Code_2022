@@ -80,6 +80,9 @@ public class RobotContainer {
     ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
     driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
 
+    ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    shooterTab.add("Shooter", m_shooterSubsystem);
+
     // Put both encoders in a list layout
     ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
     encoders.add("Left Encoder", m_driveTrainSubsystem.getLeftEncoderDistance());
@@ -108,6 +111,10 @@ public class RobotContainer {
       new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
+      new JoystickButton(m_driverController, 11).whenPressed(new InstantCommand(()
+        -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
+      new JoystickButton(m_driverController, 9).whenPressed(new InstantCommand(()
+        -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
   }
 
   /**
