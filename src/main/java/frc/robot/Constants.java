@@ -54,6 +54,11 @@ public final class Constants {
         public static final double PROFILED_DRIVE_D = 0.009;
 
       }
+    
+    public static final class IntakeConstants {
+        public static final int kIntakeMotorPort = 25;
+        public static final int kIntakeArmMotorPort = 26;
+    }
 
     public static final class TurretConstants {
         public static final int kTurretMotorPort = 21;
