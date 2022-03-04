@@ -29,20 +29,29 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void RunUp() {
+    while (!top) {
       liftMotor.set(1.0);
+    }
+    liftMotor.set(0.0);
   }
   
   public void RunDown() {
-    liftMotor.set(-1.0);
+    while (!bottom) {
+      liftMotor.set(-1.0);
+    }
+    liftMotor.set(0.0);
   }
 
   public void logToDashboard() {
       SmartDashboard.putNumber("Lift/Lift Speed", liftEncoder.getVelocity());
+      SmartDashboard.putBoolean("Lift/Lift At Top", top);
+      SmartDashboard.putBoolean("Lift/Lift At Bottom", bottom);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
     if (bottomLimitSwitch.get()&&topLimitSwitch.get()) {
       bottom = true;
       top = false;

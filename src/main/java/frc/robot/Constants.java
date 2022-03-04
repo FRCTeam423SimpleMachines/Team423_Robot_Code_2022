@@ -44,7 +44,7 @@ public final class Constants {
       }
 
     public static final class LiftConstants {
-        public static final int kLiftMotorPort = 1;
+        public static final int kLiftMotorPort = 27;
     }
 
     public static final class AutoConstants {
