@@ -56,7 +56,7 @@ public final class Constants {
       }
     
     public static final class IntakeConstants {
-        public static final int kIntakeMotorPort = 25;
+        public static final int kIntakeMotorPort = 27;
         public static final int kIntakeArmMotorPort = 26;
         public static final int kIntakeTopPort = 3;
         public static final int kIntakeBottomPort = 4;
@@ -93,7 +93,7 @@ public final class Constants {
 
 
     public static final class LiftConstants {
-        public static final int kLiftMotorPort = 27;
+        public static final int kLiftMotorPort = 26;
         public static final int kLiftBottomLimitSwitchPort = 1;
         public static final int kLiftTopLimitSwitchPort = 2;
     }
