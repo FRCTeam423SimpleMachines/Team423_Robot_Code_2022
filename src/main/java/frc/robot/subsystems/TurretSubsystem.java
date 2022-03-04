@@ -18,6 +18,18 @@ public class TurretSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem() {}
 
+  public void turretAim(double turn) {
+    if (getAngleFromEncoder(turretEncoder)<90&&getAngleFromEncoder(turretEncoder)>-90) {
+      turretMotor.set(turn*0.3);
+    }
+    else if (getAngleFromEncoder(turretEncoder)>=90) {
+      turretMotor.set(-(Math.abs(turn*0.3)));
+    }
+    else if (getAngleFromEncoder(turretEncoder)<=-90) {
+      turretMotor.set(Math.abs(turn*0.3));
+    }  
+  }
+
   public double getAngleFromEncoder(RelativeEncoder encoder) {
     return encoder.getPosition()/TurretConstants.CLICKS_PER_DEGREE;
   }
