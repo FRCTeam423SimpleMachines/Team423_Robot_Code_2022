@@ -15,6 +15,7 @@ import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -30,6 +31,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem m_driveTrainSubsystem = new DriveTrainSubsystem();
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
 
 
 
@@ -67,6 +69,9 @@ public class RobotContainer {
     );
     m_shooterSubsystem.setDefaultCommand(
       new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
+    );
+    m_turretSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
     );
 
     // Add commands to the autonomous command chooser
