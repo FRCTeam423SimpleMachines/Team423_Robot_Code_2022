@@ -19,8 +19,8 @@ public class IntakeSubsystem extends SubsystemBase {
   
   private RelativeEncoder intakeArmEncoder = intakeArmMotor.getEncoder();
 
-  DigitalInput intakeTop = new DigitalInput(3);
-  DigitalInput intakeBottom = new DigitalInput(4);
+  DigitalInput intakeTop = new DigitalInput(IntakeConstants.kIntakeTopPort);
+  DigitalInput intakeBottom = new DigitalInput(IntakeConstants.kIntakeBottomPort);
 
   /** Creates a new ExampleSubsystem. */
   public IntakeSubsystem() {}
