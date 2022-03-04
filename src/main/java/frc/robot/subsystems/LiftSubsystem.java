@@ -15,8 +15,8 @@ public class LiftSubsystem extends SubsystemBase {
 
   private RelativeEncoder liftEncoder = liftMotor.getEncoder();
 
-  DigitalInput bottomLimitSwitch = new DigitalInput(LiftConstants.kBottomLimitSwitchPort);
-  DigitalInput topLimitSwitch = new DigitalInput(LiftConstants.kTopLimitSwitchPort);
+  DigitalInput bottomLimitSwitch = new DigitalInput(LiftConstants.kLiftBottomLimitSwitchPort);
+  DigitalInput topLimitSwitch = new DigitalInput(LiftConstants.kLiftTopLimitSwitchPort);
 
   boolean top;
   boolean bottom;
