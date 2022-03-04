@@ -19,7 +19,15 @@ public class TurretSubsystem extends SubsystemBase {
   public TurretSubsystem() {}
 
   public void turretAim(double turn) {
-    turretMotor.set(turn*0.3);
+    if (getAngleFromEncoder(turretEncoder)<90&&getAngleFromEncoder(turretEncoder)>-90) {
+      turretMotor.set(turn*0.3);
+    }
+    else if (getAngleFromEncoder(turretEncoder)>=90) {
+      turretMotor.set(-(Math.abs(turn*0.3)));
+    }
+    else if (getAngleFromEncoder(turretEncoder)<=-90) {
+      turretMotor.set(Math.abs(turn*0.3));
+    }  
   }
 
   public double getAngleFromEncoder(RelativeEncoder encoder) {
@@ -40,12 +48,6 @@ public class TurretSubsystem extends SubsystemBase {
     if (magLimitSwitch.get()) {
       turretEncoder.setPosition(0.0);
     }
-
-    if (getAngleFromEncoder(turretEncoder)>90) {
-      
-    }
-
-    
   }
 
   @Override
