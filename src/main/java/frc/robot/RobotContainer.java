@@ -14,6 +14,7 @@ import frc.robot.commands.DriveDistanceProfiled;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,8 +31,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem m_driveTrainSubsystem = new DriveTrainSubsystem();
+  private final LiftSubsystem m_LiftSubsystem = new LiftSubsystem();
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+
 
 
 
@@ -73,6 +76,8 @@ public class RobotContainer {
     m_turretSubsystem.setDefaultCommand(
       new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
     );
+    m_LiftSubsystem.setDefaultCommand(new RunCommand(() 
+    -> m_LiftSubsystem.DontRun(), m_LiftSubsystem));
 
     // Add commands to the autonomous command chooser
     m_chooser.setDefaultOption("Simple Auto", new SimpleAuton(m_driveTrainSubsystem));
@@ -116,10 +121,15 @@ public class RobotContainer {
       new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
+      new JoystickButton(m_driverController, 8).whenHeld(new InstantCommand(()
+      -> m_LiftSubsystem.RunUp(), m_LiftSubsystem));
+      new JoystickButton(m_driverController, 10).whenHeld(new InstantCommand(()
+      -> m_LiftSubsystem.RunDown(), m_LiftSubsystem));
       new JoystickButton(m_driverController, 11).whenPressed(new InstantCommand(()
         -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
       new JoystickButton(m_driverController, 9).whenPressed(new InstantCommand(()
         -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
+
   }
 
   /**

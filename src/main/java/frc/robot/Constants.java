@@ -89,6 +89,12 @@ public final class Constants {
     }
 
 
+    public static final class LiftConstants {
+        public static final int kLiftMotorPort = 27;
+        public static final int kLiftBottomLimitSwitchPort = 1;
+        public static final int kLiftTopLimitSwitchPort = 2;
+    }
+
     public static final class AutoConstants {
         public static final double kAutoDriveDistanceInches = 60;
         public static final double kAutoBackupDistanceInches = 20;
