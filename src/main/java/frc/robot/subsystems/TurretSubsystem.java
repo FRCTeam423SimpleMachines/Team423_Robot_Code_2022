@@ -13,7 +13,7 @@ public class TurretSubsystem extends SubsystemBase {
   
   private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.kTurretMotorPort, MotorType.kBrushless);
   private RelativeEncoder turretEncoder = turretMotor.getEncoder();
-  DigitalInput magLimitSwitch = new DigitalInput(0);
+  DigitalInput magLimitSwitch = new DigitalInput(TurretConstants.kTurrentSensorPort);
 
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem() {}

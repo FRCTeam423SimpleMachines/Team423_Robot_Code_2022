@@ -64,6 +64,7 @@ public final class Constants {
 
     public static final class TurretConstants {
         public static final int kTurretMotorPort = 21;
+        public static final int kTurrentSensorPort = 0;
 
         public static final int TURRET_GEAR_RATIO = 560;
         public static final int ENCODER_CLICKS = 42;
@@ -84,8 +85,8 @@ public final class Constants {
       public static final int kLowerElevatorPort = 22;
       public static final int kUpperElevatorPort = 23;
       public static final int kshooterInputPort = 24;
-      public static final int kBallSwitch0 = 1;
-      public static final int kBallSwitch1 = 2;
+      public static final int kBallSwitch0 = 5;
+      public static final int kBallSwitch1 = 6;
       public static enum BallStates {ZERO, LOW, HIGH, TWO};
       
     }
