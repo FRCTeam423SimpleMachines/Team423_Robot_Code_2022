@@ -64,7 +64,7 @@ public final class Constants {
         public static final double CLICKS_PER_DEGREE = (double) TOTAL_CLICKS_PER_ROTAION/360;
     }
   
-      public static final class ShooterConstants {
+    public static final class ShooterConstants {
         public static final int kShooterMotorPort = 20;
         public static final int kencoderCPR = 2048;
         public static final double kShooterAngle = 60; // 60 degrees
@@ -72,6 +72,17 @@ public final class Constants {
         public static final double kShooterEfficiency = 0.745; // Assuming 74.5% efficiency
 
     }
+
+    public static final class BallElevatorConstants{
+      public static final int kLowerElevatorPort = 22;
+      public static final int kUpperElevatorPort = 23;
+      public static final int kshooterInputPort = 24;
+      public static final int kBallSwitch0 = 1;
+      public static final int kBallSwitch1 = 2;
+      public static enum BallStates {ZERO, LOW, HIGH, TWO};
+      
+    }
+
 
     public static final class AutoConstants {
         public static final double kAutoDriveDistanceInches = 60;
