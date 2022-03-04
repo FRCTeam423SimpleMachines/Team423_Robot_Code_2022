@@ -40,6 +40,12 @@ public class TurretSubsystem extends SubsystemBase {
     if (magLimitSwitch.get()) {
       turretEncoder.setPosition(0.0);
     }
+
+    if (getAngleFromEncoder(turretEncoder)>90) {
+      
+    }
+
+    
   }
 
   @Override
