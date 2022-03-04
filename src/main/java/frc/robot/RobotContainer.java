@@ -10,15 +10,16 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.DriveDistanceProfiled;
+import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveTrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -29,11 +30,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DriveTrainSubsystem m_driveTrainSubsystem = new DriveTrainSubsystem();
   private final LiftSubsystem m_LiftSubsystem = new LiftSubsystem();
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+
 
   /// 
   // The autonomous routines
@@ -65,13 +68,19 @@ public class RobotContainer {
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
     m_driveTrainSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(m_driverController.getY(), m_driverController.getZ() ), m_driveTrainSubsystem)
+      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(deadbandJoystick(m_driverController.getY()), deadbandJoystick(m_driverController.getZ()) ), m_driveTrainSubsystem)
+    );
+    m_shooterSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
+    );
+    m_turretSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
     );
     m_LiftSubsystem.setDefaultCommand(new RunCommand(() 
     -> m_LiftSubsystem.DontRun(), m_LiftSubsystem));
 
     // Add commands to the autonomous command chooser
-    //m_chooser.setDefaultOption("Simple Auto", m_simpleAuto);
+    m_chooser.setDefaultOption("Simple Auto", new SimpleAuton(m_driveTrainSubsystem));
     //m_chooser.addOption("Complex Auto", m_complexAuto);
 
     // Put the chooser on the dashboard
@@ -81,6 +90,9 @@ public class RobotContainer {
     ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
     driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
 
+    ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    shooterTab.add("Shooter", m_shooterSubsystem);
+
     // Put both encoders in a list layout
     ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
     encoders.add("Left Encoder", m_driveTrainSubsystem.getLeftEncoderDistance());
@@ -88,6 +100,11 @@ public class RobotContainer {
 
 
   }
+
+  public double deadbandJoystick(double input) {
+    if(Math.abs(input) < Constants.OIConstants.kDeadband) return 0;
+    else return input;
+}
 
   
   /**
@@ -101,12 +118,18 @@ public class RobotContainer {
         -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
         -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
+      new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 8).whenHeld(new InstantCommand(()
       -> m_LiftSubsystem.RunUp(), m_LiftSubsystem));
       new JoystickButton(m_driverController, 10).whenHeld(new InstantCommand(()
       -> m_LiftSubsystem.RunDown(), m_LiftSubsystem));
+      new JoystickButton(m_driverController, 11).whenPressed(new InstantCommand(()
+        -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
+      new JoystickButton(m_driverController, 9).whenPressed(new InstantCommand(()
+        -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
+
   }
 
   /**
@@ -115,7 +138,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+
+    
+    //CommandScheduler.getInstance().clearButtons();
+
+    m_driveTrainSubsystem.resetEncoders();
+    m_driveTrainSubsystem.resetGyro();
+
+    return m_chooser.getSelected();
+
   }
 }
