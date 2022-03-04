@@ -40,12 +40,21 @@ public class BallElevator extends SubsystemBase{
         upperElevatorMotor.set(-0.5);
     }
 
+    public void stopElevator() {
+        lowerElevatorMotor.set(0.0);
+        upperElevatorMotor.set(0.0);
+    }
+
     public void runShooterInputForward(){
         lowerElevatorMotor.set(0.5);
     }
 
     public void runShooterInputReverse(){
         lowerElevatorMotor.set(-0.5);
+    }
+
+    public void stopShooterInput(){
+        lowerElevatorMotor.set(0.0);
     }
 
     public BallStates getBallState(){
@@ -84,5 +93,7 @@ public class BallElevator extends SubsystemBase{
     public void simulationPeriodic() {
       // This method will be called once per scheduler run during simulation
     }
+
+
 
 }
