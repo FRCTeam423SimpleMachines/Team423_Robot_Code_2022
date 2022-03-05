@@ -11,9 +11,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
 import frc.robot.commands.DriveDistanceProfiled;
+import frc.robot.commands.RunElevator;
+import frc.robot.commands.ShootBall;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
+import frc.robot.subsystems.BallElevator;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
@@ -31,10 +35,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem m_driveTrainSubsystem = new DriveTrainSubsystem();
-  private final LiftSubsystem m_LiftSubsystem = new LiftSubsystem();
+  private final LiftSubsystem m_liftSubsystem = new LiftSubsystem();
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
-
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final BallElevator m_ballElevator = new BallElevator();
 
 
 
@@ -76,8 +81,12 @@ public class RobotContainer {
     m_turretSubsystem.setDefaultCommand(
       new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
     );
-    m_LiftSubsystem.setDefaultCommand(new RunCommand(() 
-    -> m_LiftSubsystem.DontRun(), m_LiftSubsystem));
+    m_liftSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_liftSubsystem.DontRun(), m_liftSubsystem)
+    );
+    m_ballElevator.setDefaultCommand(
+      new RunElevator(m_ballElevator)
+    );
 
     // Add commands to the autonomous command chooser
     m_chooser.setDefaultOption("Simple Auto", new SimpleAuton(m_driveTrainSubsystem));
@@ -113,22 +122,61 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+
+  /** 
+   * Main Driver Controlls:
+   * 5: Lift Up
+   * 3: Lift Down
+   * 6: Itake Up + Stop
+   * 4: Intake Down + Run
+   * 7: Reset Encoders
+   * 8: Reset Gyro
+   * Sub Driver Controlls:
+   * 1: Shoot Ball
+   * 5: Run Shooter
+   * 3: Stop Shooter
+   * 8: Toggle Elavator
+   * 6: Run Elavator Foward (Only When Elavator isn't running itself)
+   * 4: Run Elavator Backward (Only When Elavator isn't running itself)
+  */
+
   private void configureButtonBindings() {
-      new JoystickButton(m_driverController, 5).whenPressed(new InstantCommand(()
+      new JoystickButton(m_driverController, 7).whenPressed(new InstantCommand(()
         -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
+
+      new JoystickButton(m_driverController, 8).whenPressed(new InstantCommand(()
         -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0, m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 8).whenHeld(new InstantCommand(()
-      -> m_LiftSubsystem.RunUp(), m_LiftSubsystem));
-      new JoystickButton(m_driverController, 10).whenHeld(new InstantCommand(()
-      -> m_LiftSubsystem.RunDown(), m_LiftSubsystem));
-      new JoystickButton(m_driverController, 11).whenPressed(new InstantCommand(()
+
+      new JoystickButton(m_driverController, 5).whenHeld(new InstantCommand(()
+      -> m_liftSubsystem.RunUp(), m_liftSubsystem));
+
+      new JoystickButton(m_driverController, 3).whenHeld(new InstantCommand(()
+      -> m_liftSubsystem.RunDown(), m_liftSubsystem));
+
+      new JoystickButton(m_driverController2, 1).whenHeld(new ShootBall(m_ballElevator));
+
+      new JoystickButton(m_driverController2, 8).whenPressed(new InstantCommand(()
+      -> m_ballElevator.EllavotorToggle(), m_ballElevator));
+
+      new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
         -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
-      new JoystickButton(m_driverController, 9).whenPressed(new InstantCommand(()
+
+      new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
         -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
+
+      new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
+        -> m_intakeSubsystem.intakeUp(), m_intakeSubsystem));
+
+      new JoystickButton(m_driverController, 4).whenPressed(new InstantCommand(()
+        -> m_intakeSubsystem.intakeDown(), m_intakeSubsystem));
+
+      if (!(m_ballElevator.ElevatorState())) {
+        new JoystickButton(m_driverController2, 6).whenHeld(new InstantCommand(()
+        -> m_ballElevator.runElevatorForward(), m_ballElevator));
+
+        new JoystickButton(m_driverController2, 4).whenHeld(new InstantCommand(()
+        -> m_ballElevator.runElevatorReverse(), m_ballElevator));
+      }
 
   }
 

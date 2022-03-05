@@ -6,18 +6,20 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallElevatorConstants;
 import frc.robot.Constants.BallElevatorConstants.BallStates;
+import frc.robot.commands.RunElevator;
 
 public class BallElevator extends SubsystemBase{
     
-    private final CANSparkMax lowerElevatorMotor = new CANSparkMax(BallElevatorConstants.kLowerElevatorPort, MotorType.kBrushless);
+    //private final CANSparkMax lowerElevatorMotor = new CANSparkMax(BallElevatorConstants.kLowerElevatorPort, MotorType.kBrushless);
     private final CANSparkMax upperElevatorMotor = new CANSparkMax(BallElevatorConstants.kUpperElevatorPort, MotorType.kBrushless);
     private final CANSparkMax shooterInputMotor = new CANSparkMax(BallElevatorConstants.kshooterInputPort, MotorType.kBrushless);
     
     
-    private RelativeEncoder lowerElevatorEncoder = lowerElevatorMotor.getEncoder();
+    //private RelativeEncoder lowerElevatorEncoder = lowerElevatorMotor.getEncoder();
     private RelativeEncoder upperElevatorEncoder = upperElevatorMotor.getEncoder();
     private RelativeEncoder shooterInputEncoder = shooterInputMotor.getEncoder();
 
@@ -26,35 +28,38 @@ public class BallElevator extends SubsystemBase{
 
     private BallElevatorConstants.BallStates BallState = BallStates.ZERO;
     
+    private final BallElevator m_ballElevator = new BallElevator();
+
+    boolean elevatorRuning=true;
   
     /** Creates a new ExampleSubsystem. */
     public BallElevator() {}
 
     public void runElevatorForward(){
-        lowerElevatorMotor.set(0.5);
+        //lowerElevatorMotor.set(0.5);
         upperElevatorMotor.set(0.5);
     }
 
     public void runElevatorReverse(){
-        lowerElevatorMotor.set(-0.5);
+        //lowerElevatorMotor.set(-0.5);
         upperElevatorMotor.set(-0.5);
     }
 
     public void stopElevator() {
-        lowerElevatorMotor.set(0.0);
+        //lowerElevatorMotor.set(0.0);
         upperElevatorMotor.set(0.0);
     }
 
     public void runShooterInputForward(){
-        lowerElevatorMotor.set(0.5);
+        //lowerElevatorMotor.set(0.5);
     }
 
     public void runShooterInputReverse(){
-        lowerElevatorMotor.set(-0.5);
+        //lowerElevatorMotor.set(-0.5);
     }
 
     public void stopShooterInput(){
-        lowerElevatorMotor.set(0.0);
+        //lowerElevatorMotor.set(0.0);
     }
 
     public BallStates getBallState(){
@@ -73,10 +78,26 @@ public class BallElevator extends SubsystemBase{
         }
 
     }
+
+    public void EllavotorToggle() {
+        if (elevatorRuning) {
+          setDefaultCommand(new RunCommand(()-> m_ballElevator.doNothing(), m_ballElevator));
+          elevatorRuning=false;
+        }
+        else {
+          setDefaultCommand(new RunElevator(m_ballElevator));
+        }
+    }
+
+    public void doNothing() {}
+
+    public boolean ElevatorState() {
+        return elevatorRuning;
+    }
   
   
     public void logToDashboard() {
-      SmartDashboard.putNumber("Lower Elevator Speed", lowerElevatorEncoder.getVelocity());
+      //SmartDashboard.putNumber("Lower Elevator Speed", lowerElevatorEncoder.getVelocity());
       SmartDashboard.putNumber("Upper Elevator Speed", upperElevatorEncoder.getVelocity());
       SmartDashboard.putNumber("Shooter Input Speed", shooterInputEncoder.getVelocity());
       SmartDashboard.putString("Ball Elevator State", BallState.toString());
