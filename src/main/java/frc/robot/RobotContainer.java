@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -11,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
 import frc.robot.commands.DriveDistanceProfiled;
+import frc.robot.commands.RunLiftUp;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveTrainSubsystem;
@@ -65,10 +67,12 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    //CameraServer.startAutomaticCapture();
+
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
     m_driveTrainSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(deadbandJoystick(m_driverController.getY()), deadbandJoystick(m_driverController.getZ()) ), m_driveTrainSubsystem)
+      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(deadbandJoystick(m_driverController.getY()), deadbandJoystick(-m_driverController.getZ()) ), m_driveTrainSubsystem)
     );
     m_shooterSubsystem.setDefaultCommand(
       new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
@@ -92,6 +96,9 @@ public class RobotContainer {
 
     ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
     shooterTab.add("Shooter", m_shooterSubsystem);
+
+    ShuffleboardTab liftTab = Shuffleboard.getTab("Lift");
+    liftTab.add("Lift", m_LiftSubsystem);
 
     // Put both encoders in a list layout
     ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
@@ -121,9 +128,8 @@ public class RobotContainer {
       new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
       new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 8).whenHeld(new InstantCommand(()
-      -> m_LiftSubsystem.RunUp(), m_LiftSubsystem));
-      new JoystickButton(m_driverController, 10).whenHeld(new InstantCommand(()
+      new JoystickButton(m_driverController, 8).whileHeld(new RunLiftUp(m_LiftSubsystem));
+      new JoystickButton(m_driverController, 10).whileHeld(new RunCommand(()
       -> m_LiftSubsystem.RunDown(), m_LiftSubsystem));
       new JoystickButton(m_driverController, 11).whenPressed(new InstantCommand(()
         -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));

@@ -49,7 +49,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
         // We need to invert one side of the drivetrain so that positive voltages
         // result in both sides moving forward. Depending on how your robot's
         // gearbox is constructed, you might have to invert the left side instead.
-        m_rightMotors.setInverted(true);
+        m_leftMotors.setInverted(true);
 
         mGyro = new AHRS(SerialPort.Port.kMXP);
 
@@ -113,8 +113,8 @@ public class DriveTrainSubsystem extends SubsystemBase{
     rightPIDController.setSmartMotionMaxVelocity(2000, 0);
     rightPIDController.setSmartMotionMaxAccel(1500, 0);
     
-    leftPIDController.setReference(left.position, CANSparkMax.ControlType.kSmartMotion);
-    rightPIDController.setReference(-right.position, CANSparkMax.ControlType.kSmartMotion);
+    leftPIDController.setReference(-left.position, CANSparkMax.ControlType.kSmartMotion);
+    rightPIDController.setReference(right.position, CANSparkMax.ControlType.kSmartMotion);
     
 
   }
@@ -138,7 +138,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
   }
 
   public double getAvrageEncoderDistance() {
-    return -(getLeftEncoderDistance()-getRightEncoderDistance())/2;
+    return -(-getLeftEncoderDistance()+getRightEncoderDistance())/2;
   }
 
 

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LiftConstants;
+import frc.robot.Constants.LiftConstants.LiftStates;
 
 public class LiftSubsystem extends SubsystemBase {
 
@@ -18,8 +19,7 @@ public class LiftSubsystem extends SubsystemBase {
   DigitalInput bottomLimitSwitch = new DigitalInput(LiftConstants.kLiftBottomLimitSwitchPort);
   DigitalInput topLimitSwitch = new DigitalInput(LiftConstants.kLiftTopLimitSwitchPort);
 
-  boolean top;
-  boolean bottom;
+  private LiftConstants.LiftStates state = LiftConstants.LiftStates.BOTTOM;
 
   /** Creates a new ExampleSubsystem. */
   public LiftSubsystem() {}
@@ -29,23 +29,20 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void RunUp() {
-    while (!top) {
+    if (state != LiftStates.TOP) {
       liftMotor.set(1.0);
     }
-    liftMotor.set(0.0);
   }
   
   public void RunDown() {
-    while (!bottom) {
+    if (state != LiftStates.BOTTOM) {
       liftMotor.set(-1.0);
     }
-    liftMotor.set(0.0);
   }
 
   public void logToDashboard() {
       SmartDashboard.putNumber("Lift/Lift Speed", liftEncoder.getVelocity());
-      SmartDashboard.putBoolean("Lift/Lift At Top", top);
-      SmartDashboard.putBoolean("Lift/Lift At Bottom", bottom);
+      SmartDashboard.putString("Lift/Lift State", state.toString());
   }
 
   @Override
@@ -53,16 +50,13 @@ public class LiftSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     
     if (bottomLimitSwitch.get()&&topLimitSwitch.get()) {
-      bottom = true;
-      top = false;
+      state = LiftStates.BOTTOM;
     }
-    else if (bottomLimitSwitch.get()) {
-      bottom = false;
-      top = true;
+    else if (topLimitSwitch.get() && !bottomLimitSwitch.get()) {
+      state = LiftStates.TOP;
     }
     else {
-      bottom = false;
-      top = false;
+      state = LiftStates.MIDDLE;
     }
 
     logToDashboard();

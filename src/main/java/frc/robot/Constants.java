@@ -87,8 +87,7 @@ public final class Constants {
       public static final int kshooterInputPort = 24;
       public static final int kBallSwitch0 = 5;
       public static final int kBallSwitch1 = 6;
-      public static enum BallStates {ZERO, LOW, HIGH, TWO};
-      
+      public static enum BallStates {ZERO, LOW, HIGH, TWO};      
     }
 
 
@@ -96,6 +95,8 @@ public final class Constants {
         public static final int kLiftMotorPort = 26;
         public static final int kLiftBottomLimitSwitchPort = 1;
         public static final int kLiftTopLimitSwitchPort = 2;
+        
+        public static enum LiftStates {BOTTOM, MIDDLE, TOP};
     }
 
     public static final class AutoConstants {
