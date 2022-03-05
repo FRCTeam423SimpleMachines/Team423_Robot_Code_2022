@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
 import frc.robot.commands.DriveDistanceProfiled;
+import frc.robot.commands.RunLiftDown;
 import frc.robot.commands.RunLiftUp;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
@@ -33,9 +34,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem m_driveTrainSubsystem = new DriveTrainSubsystem();
-  private final LiftSubsystem m_LiftSubsystem = new LiftSubsystem();
+  private final LiftSubsystem m_liftSubsystem = new LiftSubsystem();
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+  
 
 
 
@@ -80,8 +82,8 @@ public class RobotContainer {
     m_turretSubsystem.setDefaultCommand(
       new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
     );
-    m_LiftSubsystem.setDefaultCommand(new RunCommand(() 
-    -> m_LiftSubsystem.DontRun(), m_LiftSubsystem));
+    m_liftSubsystem.setDefaultCommand(new RunCommand(() 
+    -> m_liftSubsystem.DontRun(), m_liftSubsystem));
 
     // Add commands to the autonomous command chooser
     m_chooser.setDefaultOption("Simple Auto", new SimpleAuton(m_driveTrainSubsystem));
@@ -98,7 +100,7 @@ public class RobotContainer {
     shooterTab.add("Shooter", m_shooterSubsystem);
 
     ShuffleboardTab liftTab = Shuffleboard.getTab("Lift");
-    liftTab.add("Lift", m_LiftSubsystem);
+    liftTab.add("Lift", m_liftSubsystem);
 
     // Put both encoders in a list layout
     ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
@@ -120,22 +122,50 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
-      new JoystickButton(m_driverController, 5).whenPressed(new InstantCommand(()
-        -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
-        -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 12).whenPressed(new DriveDistanceProfiled(96.0, m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 3).whenPressed(new TurnToAngleProfiled(90.0, m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 4).whenPressed(new TurnToAngleProfiled(-90.0, m_driveTrainSubsystem));
-      new JoystickButton(m_driverController, 8).whileHeld(new RunLiftUp(m_LiftSubsystem));
-      new JoystickButton(m_driverController, 10).whileHeld(new RunCommand(()
-      -> m_LiftSubsystem.RunDown(), m_LiftSubsystem));
-      new JoystickButton(m_driverController, 11).whenPressed(new InstantCommand(()
-        -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
-      new JoystickButton(m_driverController, 9).whenPressed(new InstantCommand(()
-        -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
+   /** 
+   * Main Driver Controlls:
+   * 5: Lift Up
+   * 3: Lift Down
+   * 6: Itake Up + Stop
+   * 4: Intake Down + Run
+   * 7: Reset Encoders
+   * 8: Reset Gyro
+   * Sub Driver Controlls:
+   * 1: Shoot Ball
+   * 5: Run Shooter
+   * 3: Stop Shooter
+   * 8: Toggle Elavator
+   * 6: Run Elavator Foward (Only When Elavator isn't running itself)
+   * 4: Run Elavator Backward (Only When Elavator isn't running itself)
+  */
 
+  private void configureButtonBindings() {
+    new JoystickButton(m_driverController, 7).whenPressed(new InstantCommand(()
+      -> m_driveTrainSubsystem.resetEncoders(), m_driveTrainSubsystem));
+
+    new JoystickButton(m_driverController, 8).whenPressed(new InstantCommand(()
+      -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
+
+    new JoystickButton(m_driverController, 5).whenHeld(new RunLiftUp(m_liftSubsystem));
+
+    new JoystickButton(m_driverController, 3).whenHeld(new RunLiftDown(m_liftSubsystem));
+
+    //new JoystickButton(m_driverController2, 1).whenHeld(new ShootBall(m_ballElevator));
+
+    //new JoystickButton(m_driverController2, 8).whenPressed(new InstantCommand(()
+    //-> m_ballElevator.EllavotorToggle(), m_ballElevator));
+
+    new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
+      -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
+
+    new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
+      -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
+
+    //new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
+      //-> m_intakeSubsystem.intakeUp(), m_intakeSubsystem));
+
+    //new JoystickButton(m_driverController, 4).whenPressed(new InstantCommand(()
+      //-> m_intakeSubsystem.intakeDown(), m_intakeSubsystem));
   }
 
   /**
