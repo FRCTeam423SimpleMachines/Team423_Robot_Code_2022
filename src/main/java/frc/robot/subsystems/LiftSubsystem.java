@@ -29,15 +29,15 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void RunUp() {
-    if (state != LiftStates.TOP) {
+    //if (state != LiftStates.TOP) {
       liftMotor.set(1.0);
-    }
+    //}
   }
   
   public void RunDown() {
-    if (state != LiftStates.BOTTOM) {
+    //if (state != LiftStates.BOTTOM) {
       liftMotor.set(-1.0);
-    }
+    //}
   }
 
   public void logToDashboard() {

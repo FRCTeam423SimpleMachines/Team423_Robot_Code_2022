@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
+import frc.robot.commands.DoNothingAuton;
 import frc.robot.commands.DriveDistanceProfiled;
 import frc.robot.commands.RunLiftDown;
 import frc.robot.commands.RunLiftUp;
@@ -35,8 +36,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem m_driveTrainSubsystem = new DriveTrainSubsystem();
   private final LiftSubsystem m_liftSubsystem = new LiftSubsystem();
-  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-  private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+  //private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  //private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
   
 
 
@@ -74,19 +75,20 @@ public class RobotContainer {
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
     m_driveTrainSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(deadbandJoystick(m_driverController.getY()), deadbandJoystick(-m_driverController.getZ()) ), m_driveTrainSubsystem)
+      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(0.9*squareInput(deadbandJoystick(m_driverController.getY())), -0.9*m_driverController.getZ() ), m_driveTrainSubsystem)
     );
-    m_shooterSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
-    );
-    m_turretSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
-    );
+    //m_shooterSubsystem.setDefaultCommand(
+      //new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
+    //);
+    //m_turretSubsystem.setDefaultCommand(
+      //new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
+    //);
     m_liftSubsystem.setDefaultCommand(new RunCommand(() 
     -> m_liftSubsystem.DontRun(), m_liftSubsystem));
 
     // Add commands to the autonomous command chooser
     m_chooser.setDefaultOption("Simple Auto", new SimpleAuton(m_driveTrainSubsystem));
+    m_chooser.addOption("Do noothing", new DoNothingAuton(m_driveTrainSubsystem));
     //m_chooser.addOption("Complex Auto", m_complexAuto);
 
     // Put the chooser on the dashboard
@@ -97,7 +99,7 @@ public class RobotContainer {
     driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
 
     ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-    shooterTab.add("Shooter", m_shooterSubsystem);
+    //shooterTab.add("Shooter", m_shooterSubsystem);
 
     ShuffleboardTab liftTab = Shuffleboard.getTab("Lift");
     liftTab.add("Lift", m_liftSubsystem);
@@ -113,7 +115,11 @@ public class RobotContainer {
   public double deadbandJoystick(double input) {
     if(Math.abs(input) < Constants.OIConstants.kDeadband) return 0;
     else return input;
-}
+  }
+
+  public double squareInput(double input){
+      return input/Math.abs(input)*Math.pow(input, 2);
+  }
 
   
   /**
@@ -155,11 +161,11 @@ public class RobotContainer {
     //new JoystickButton(m_driverController2, 8).whenPressed(new InstantCommand(()
     //-> m_ballElevator.EllavotorToggle(), m_ballElevator));
 
-    new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
-      -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
+    //new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
+      //-> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
 
-    new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
-      -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
+    //new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
+      //-> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
 
     //new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
       //-> m_intakeSubsystem.intakeUp(), m_intakeSubsystem));

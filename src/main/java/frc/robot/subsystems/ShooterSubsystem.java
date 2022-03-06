@@ -39,11 +39,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void RunShooter() {
-    shooterMotor.set(maxSpeed);
+    //shooterMotor.set(maxSpeed);
   }
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Shooter/Shooter Speed (RPM)", shooterMotor.getSelectedSensorVelocity()/ShooterConstants.kencoderCPR);
+    //SmartDashboard.putNumber("Shooter/Shooter Speed (RPM)", shooterMotor.getSelectedSensorVelocity()/ShooterConstants.kencoderCPR);
     SmartDashboard.putNumber("Shooter/Shooter Max Speed", maxSpeed);
     
     
