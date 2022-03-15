@@ -29,31 +29,36 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void RunUp() {
-    //if (state != LiftStates.TOP) {
-      liftMotor.set(1.0);
-    //}
+    if (state != LiftStates.TOP) {
+      liftMotor.set(0.8);
+    }
   }
   
   public void RunDown() {
-    //if (state != LiftStates.BOTTOM) {
-      liftMotor.set(-1.0);
-    //}
+    if (state != LiftStates.BOTTOM) {
+      liftMotor.set(-0.8);
+    }
   }
 
   public void logToDashboard() {
+      SmartDashboard.putNumber("Lift/Lift Position", liftEncoder.getPosition());
       SmartDashboard.putNumber("Lift/Lift Speed", liftEncoder.getVelocity());
       SmartDashboard.putString("Lift/Lift State", state.toString());
+      SmartDashboard.putBoolean("Lift/Top Limit", topLimitSwitch.get());
+      SmartDashboard.putBoolean("Lift/Bottom Limit", bottomLimitSwitch.get());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     
-    if (bottomLimitSwitch.get()&&topLimitSwitch.get()) {
+    if (!bottomLimitSwitch.get() || liftEncoder.getPosition() <= 0) {
       state = LiftStates.BOTTOM;
+      liftEncoder.setPosition(0.0);
     }
-    else if (topLimitSwitch.get() && !bottomLimitSwitch.get()) {
+    else if (!topLimitSwitch.get() || liftEncoder.getPosition() >= 140) {
       state = LiftStates.TOP;
+      //liftEncoder.setPosition(140.0);
     }
     else {
       state = LiftStates.MIDDLE;

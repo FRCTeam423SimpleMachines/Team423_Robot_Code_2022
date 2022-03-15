@@ -13,11 +13,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
 import frc.robot.commands.DoNothingAuton;
 import frc.robot.commands.DriveDistanceProfiled;
+import frc.robot.commands.RunElevator;
 import frc.robot.commands.RunLiftDown;
 import frc.robot.commands.RunLiftUp;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
+import frc.robot.subsystems.BallElevator;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
@@ -36,9 +39,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem m_driveTrainSubsystem = new DriveTrainSubsystem();
   private final LiftSubsystem m_liftSubsystem = new LiftSubsystem();
-  //private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-  //private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
-  
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final BallElevator m_ballElevator = new BallElevator();
 
 
 
@@ -77,12 +81,12 @@ public class RobotContainer {
     m_driveTrainSubsystem.setDefaultCommand(
       new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(0.9*squareInput(deadbandJoystick(m_driverController.getY())), -0.9*m_driverController.getZ() ), m_driveTrainSubsystem)
     );
-    //m_shooterSubsystem.setDefaultCommand(
-      //new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
-    //);
-    //m_turretSubsystem.setDefaultCommand(
-      //new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
-    //);
+    m_shooterSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
+    );
+    m_turretSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
+    );
     m_liftSubsystem.setDefaultCommand(new RunCommand(() 
     -> m_liftSubsystem.DontRun(), m_liftSubsystem));
 
@@ -99,7 +103,10 @@ public class RobotContainer {
     driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
 
     ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-    //shooterTab.add("Shooter", m_shooterSubsystem);
+    shooterTab.add("Shooter", m_shooterSubsystem);
+
+    ShuffleboardTab elevatorTab = Shuffleboard.getTab("Elevator");
+    elevatorTab.add("Elevator", m_ballElevator);
 
     ShuffleboardTab liftTab = Shuffleboard.getTab("Lift");
     liftTab.add("Lift", m_liftSubsystem);
@@ -161,17 +168,32 @@ public class RobotContainer {
     //new JoystickButton(m_driverController2, 8).whenPressed(new InstantCommand(()
     //-> m_ballElevator.EllavotorToggle(), m_ballElevator));
 
-    //new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
-      //-> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
+    new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
+      -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
 
-    //new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
-      //-> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
+    new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
+      -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
 
-    //new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
-      //-> m_intakeSubsystem.intakeUp(), m_intakeSubsystem));
+    new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
+      -> m_intakeSubsystem.intakeUp(), m_intakeSubsystem));
 
-    //new JoystickButton(m_driverController, 4).whenPressed(new InstantCommand(()
-      //-> m_intakeSubsystem.intakeDown(), m_intakeSubsystem));
+    new JoystickButton(m_driverController, 4).whenPressed(new InstantCommand(()
+      -> m_intakeSubsystem.intakeDown(), m_intakeSubsystem));
+
+      new JoystickButton(m_driverController, 2).whenPressed(new InstantCommand(()
+      -> m_intakeSubsystem.intakeArmStop(), m_intakeSubsystem));
+
+    new JoystickButton(m_driverController2, 4).whenHeld(new InstantCommand(()
+    -> m_ballElevator.runElevatorReverse(), m_ballElevator));
+
+    new JoystickButton(m_driverController2, 6).whenHeld(new InstantCommand(()
+      -> m_ballElevator.runElevatorForward(), m_ballElevator));
+  
+    new JoystickButton(m_driverController2, 1).whenHeld(new InstantCommand(()
+      -> m_ballElevator.runShooterInputForward(), m_ballElevator));
+
+    new JoystickButton(m_driverController2, 2).whenHeld(new InstantCommand(() 
+      -> m_turretSubsystem.turretAimSlow(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem));
   }
 
   /**
@@ -184,8 +206,8 @@ public class RobotContainer {
     
     //CommandScheduler.getInstance().clearButtons();
 
-    m_driveTrainSubsystem.resetEncoders();
-    m_driveTrainSubsystem.resetGyro();
+    //m_driveTrainSubsystem.resetEncoders();
+    //m_driveTrainSubsystem.resetGyro();
 
     return m_chooser.getSelected();
 

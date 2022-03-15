@@ -10,7 +10,8 @@ public class SimpleAuton extends SequentialCommandGroup{
         // super(new FooCommand(), new BarCommand());
         super(
           // Drive 7.4 ft backwards
-          new SequentialCommandGroup(new DriveDistanceProfiled(-7.4*12, drive))
+          new SequentialCommandGroup(new ResetEncodersCommand(drive),
+          new DriveDistanceProfiled(-7.4*12, drive))
           
         );
       }

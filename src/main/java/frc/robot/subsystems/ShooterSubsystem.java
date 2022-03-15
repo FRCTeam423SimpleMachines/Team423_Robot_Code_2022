@@ -39,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void RunShooter() {
-    //shooterMotor.set(maxSpeed);
+    shooterMotor.set(maxSpeed);
   }
 
   public void logToDashboard() {

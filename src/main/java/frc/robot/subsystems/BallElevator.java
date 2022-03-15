@@ -5,6 +5,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallElevatorConstants;
@@ -21,6 +23,8 @@ public class BallElevator extends SubsystemBase{
     private RelativeEncoder upperElevatorEncoder = upperElevatorMotor.getEncoder();
     private RelativeEncoder shooterInputEncoder = shooterInputMotor.getEncoder();
 
+    private Relay ballKickerRelay = new Relay(0);
+
     DigitalInput ballLow = new DigitalInput(BallElevatorConstants.kBallSwitch0);
     DigitalInput ballHigh = new DigitalInput(BallElevatorConstants.kBallSwitch1);
 
@@ -28,7 +32,10 @@ public class BallElevator extends SubsystemBase{
     
   
     /** Creates a new ExampleSubsystem. */
-    public BallElevator() {}
+    public BallElevator() {
+        shooterInputMotor.setInverted(true);
+        lowerElevatorMotor.setInverted(true);
+    }
 
     public void runElevatorForward(){
         lowerElevatorMotor.set(0.5);
@@ -46,15 +53,21 @@ public class BallElevator extends SubsystemBase{
     }
 
     public void runShooterInputForward(){
-        lowerElevatorMotor.set(0.5);
+        shooterInputMotor.set(0.5);
+        ballKickerRelay.set(Relay.Value.kForward);
     }
 
     public void runShooterInputReverse(){
-        lowerElevatorMotor.set(-0.5);
+        shooterInputMotor.set(-0.5);
+        ballKickerRelay.set(Relay.Value.kReverse);
     }
 
     public void stopShooterInput(){
-        lowerElevatorMotor.set(0.0);
+        ballKickerRelay.set(Relay.Value.kOff);
+    }
+
+    public void stopShooterInput(){
+        shooterInputMotor.set(0.0);
     }
 
     public BallStates getBallState(){

@@ -26,23 +26,29 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem() {}
 
   public void intakeUp() {
-    while (!intakeTop.get()) {
+    //while (!intakeTop.get()) {
       intakeArmMotor.set(0.8);
-    }
-    intakeArmMotor.set(0.0);
+    //}
+    //intakeArmMotor.set(0.0);
     intakeMotor.set(0.0);
   }
 
   public void intakeDown() {
-    while (!intakeBottom.get()) {
+    //while (!intakeBottom.get()) {
       intakeArmMotor.set(-0.8);
-    }
-    intakeArmMotor.set(0.0);
+    //}
+    //intakeArmMotor.set(0.0);
     intakeMotor.set(1.0); 
+  }
+
+  public void intakeArmStop() {
+    intakeArmMotor.set(0.0);
   }
 
   public void logToDashboard() {
     SmartDashboard.putNumber("Intake/Intake Arm Position", intakeArmEncoder.getPosition());
+    SmartDashboard.putBoolean("Intake/Top", intakeTop.get());
+    SmartDashboard.putBoolean("Intake/Bottom", intakeBottom.get());
   }
 
   @Override

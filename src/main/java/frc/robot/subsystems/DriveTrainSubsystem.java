@@ -153,6 +153,10 @@ public class DriveTrainSubsystem extends SubsystemBase{
 
   /** Resets the drive encoders. */
   public void resetEncoders() {
+    leftMotor1.getEncoder().setPosition(0.0);
+    leftMotor3.getEncoder().setPosition(0.0);
+    rightMotor1.getEncoder().setPosition(0.0);
+    rightMotor3.getEncoder().setPosition(0.0);
     m_encoderL.setPosition(0.0);
     m_encoderR.setPosition(0.0);
   }
