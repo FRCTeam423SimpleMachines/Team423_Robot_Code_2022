@@ -63,12 +63,10 @@ public class BallElevator extends SubsystemBase{
     }
 
     public void stopShooterInput(){
+        shooterInputMotor.set(0.0);
         ballKickerRelay.set(Relay.Value.kOff);
     }
 
-    public void stopShooterInput(){
-        shooterInputMotor.set(0.0);
-    }
 
     public BallStates getBallState(){
         return BallState;
