@@ -60,6 +60,7 @@ public final class Constants {
         public static final int kIntakeArmMotorPort = 25;
         public static final int kIntakeTopPort = 3;
         public static final int kIntakeBottomPort = 4;
+        public static enum IntakeStates {BOTTOM, MIDDLE, TOP};
     }
 
     public static final class TurretConstants {
@@ -85,6 +86,7 @@ public final class Constants {
       public static final int kLowerElevatorPort = 22;
       public static final int kUpperElevatorPort = 23;
       public static final int kshooterInputPort = 24;
+      public static final int kballKickerPort = 0;
       public static final int kBallSwitch0 = 5;
       public static final int kBallSwitch1 = 6;
       public static enum BallStates {ZERO, LOW, HIGH, TWO};      

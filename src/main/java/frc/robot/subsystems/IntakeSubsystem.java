@@ -11,11 +11,11 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-  //private final CANSparkMax intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
   private final CANSparkMax intakeArmMotor = new CANSparkMax(IntakeConstants.kIntakeArmMotorPort, MotorType.kBrushless);
 
   private final WPI_VictorSPX intakeMotor = new WPI_VictorSPX(IntakeConstants.kIntakeMotorPort);
 
+  private IntakeConstants.IntakeStates state = IntakeConstants.IntakeStates.TOP;
   
   private RelativeEncoder intakeArmEncoder = intakeArmMotor.getEncoder();
 
@@ -26,34 +26,56 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem() {}
 
   public void intakeUp() {
-    //while (!intakeTop.get()) {
-      intakeArmMotor.set(0.8);
-    //}
-    //intakeArmMotor.set(0.0);
-    intakeMotor.set(0.0);
+    if (state != IntakeConstants.IntakeStates.TOP) {
+      intakeArmMotor.set(0.3);
+    } else {
+      intakeArmMotor.set(0.0);
+      intakeMotor.set(0.0);
+    }
   }
 
   public void intakeDown() {
-    //while (!intakeBottom.get()) {
-      intakeArmMotor.set(-0.8);
-    //}
-    //intakeArmMotor.set(0.0);
-    intakeMotor.set(1.0); 
+    if (state != IntakeConstants.IntakeStates.BOTTOM) {
+      intakeArmMotor.set(-0.3);
+    } else {
+      intakeArmMotor.set(0.0);
+      intakeMotor.set(1.0); 
+    }
   }
 
   public void intakeArmStop() {
     intakeArmMotor.set(0.0);
   }
 
+  public boolean getTopEncoder(){
+    return intakeTop.get();
+  }
+
+  public boolean getBottomEncoder(){
+    return intakeBottom.get();
+  }
+
   public void logToDashboard() {
     SmartDashboard.putNumber("Intake/Intake Arm Position", intakeArmEncoder.getPosition());
     SmartDashboard.putBoolean("Intake/Top", intakeTop.get());
     SmartDashboard.putBoolean("Intake/Bottom", intakeBottom.get());
+    SmartDashboard.putString("Intake/State", state.toString());
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (!intakeBottom.get()) { 
+      state = IntakeConstants.IntakeStates.BOTTOM;
+      intakeArmEncoder.setPosition(0.0);
+    }
+    else if (!intakeTop.get() || intakeArmEncoder.getPosition() >= 40) {
+      state = IntakeConstants.IntakeStates.TOP;
+    }
+    else {
+      state = IntakeConstants.IntakeStates.MIDDLE;
+    }
     logToDashboard();
   }
 

@@ -14,6 +14,8 @@ import frc.robot.Constants.*;
 import frc.robot.commands.DoNothingAuton;
 import frc.robot.commands.DriveDistanceProfiled;
 import frc.robot.commands.RunElevator;
+import frc.robot.commands.RunIntakeDown;
+import frc.robot.commands.RunIntakeUp;
 import frc.robot.commands.RunLiftDown;
 import frc.robot.commands.RunLiftUp;
 import frc.robot.commands.SimpleAuton;
@@ -74,7 +76,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    //CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
 
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
@@ -174,11 +176,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
       -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
 
-    new JoystickButton(m_driverController, 6).whenPressed(new InstantCommand(()
-      -> m_intakeSubsystem.intakeUp(), m_intakeSubsystem));
+    new JoystickButton(m_driverController, 6).whenPressed(new RunIntakeUp(m_intakeSubsystem));
 
-    new JoystickButton(m_driverController, 4).whenPressed(new InstantCommand(()
-      -> m_intakeSubsystem.intakeDown(), m_intakeSubsystem));
+    new JoystickButton(m_driverController, 4).whenPressed(new RunIntakeDown(m_intakeSubsystem));
 
       new JoystickButton(m_driverController, 2).whenPressed(new InstantCommand(()
       -> m_intakeSubsystem.intakeArmStop(), m_intakeSubsystem));
