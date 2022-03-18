@@ -27,7 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void intakeUp() {
     if (state != IntakeConstants.IntakeStates.TOP) {
-      intakeArmMotor.set(0.3);
+      intakeArmMotor.set(0.15);
     } else {
       intakeArmMotor.set(0.0);
       intakeMotor.set(0.0);
@@ -36,7 +36,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void intakeDown() {
     if (state != IntakeConstants.IntakeStates.BOTTOM) {
-      intakeArmMotor.set(-0.3);
+      intakeArmMotor.set(-0.15);
     } else {
       intakeArmMotor.set(0.0);
       intakeMotor.set(1.0); 

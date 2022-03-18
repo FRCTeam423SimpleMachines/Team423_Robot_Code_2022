@@ -20,6 +20,7 @@ import frc.robot.commands.RunLiftDown;
 import frc.robot.commands.RunLiftUp;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
+import frc.robot.commands.TurretSlow;
 import frc.robot.subsystems.BallElevator;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -147,11 +148,13 @@ public class RobotContainer {
    * 8: Reset Gyro
    * Sub Driver Controlls:
    * 1: Shoot Ball
-   * 5: Run Shooter
+   * 2: Slow Turret
+   * 5: Run Shooter (High)
+   * 4; Run Shooter (Low)
    * 3: Stop Shooter
    * 8: Toggle Elavator
-   * 6: Run Elavator Foward (Only When Elavator isn't running itself)
-   * 4: Run Elavator Backward (Only When Elavator isn't running itself)
+   * 10: Run Elavator Foward (Only When Elavator isn't running itself)
+   * 12: Run Elavator Backward (Only When Elavator isn't running itself)
   */
 
   private void configureButtonBindings() {
@@ -176,6 +179,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
       -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
 
+    new JoystickButton(m_driverController2, 4).whenPressed(new InstantCommand(()
+      -> m_shooterSubsystem.SetShooterMaxSpeed(0.3), m_shooterSubsystem));
+
     new JoystickButton(m_driverController, 6).whenPressed(new RunIntakeUp(m_intakeSubsystem));
 
     new JoystickButton(m_driverController, 4).whenPressed(new RunIntakeDown(m_intakeSubsystem));
@@ -183,17 +189,16 @@ public class RobotContainer {
       new JoystickButton(m_driverController, 2).whenPressed(new InstantCommand(()
       -> m_intakeSubsystem.intakeArmStop(), m_intakeSubsystem));
 
-    new JoystickButton(m_driverController2, 4).whenHeld(new InstantCommand(()
+    new JoystickButton(m_driverController2, 10).whenHeld(new InstantCommand(()
     -> m_ballElevator.runElevatorReverse(), m_ballElevator));
 
-    new JoystickButton(m_driverController2, 6).whenHeld(new InstantCommand(()
+    new JoystickButton(m_driverController2, 12).whenHeld(new InstantCommand(()
       -> m_ballElevator.runElevatorForward(), m_ballElevator));
   
     new JoystickButton(m_driverController2, 1).whenHeld(new InstantCommand(()
       -> m_ballElevator.runShooterInputForward(), m_ballElevator));
 
-    new JoystickButton(m_driverController2, 2).whenHeld(new InstantCommand(() 
-      -> m_turretSubsystem.turretAimSlow(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem));
+    new JoystickButton(m_driverController2, 2).whenHeld(new TurretSlow(m_turretSubsystem, ()-> deadbandJoystick(m_driverController2.getZ())));
   }
 
   /**

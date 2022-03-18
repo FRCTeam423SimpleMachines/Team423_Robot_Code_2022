@@ -13,43 +13,18 @@ public class TurretSubsystem extends SubsystemBase {
   
   private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.kTurretMotorPort, MotorType.kBrushless);
   private RelativeEncoder turretEncoder = turretMotor.getEncoder();
-  private boolean slowTurret = false;
   //DigitalInput magLimitSwitch = new DigitalInput(TurretConstants.kTurrentSensorPort);
 
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem() {}
 
-  public void turretSlow() {
-    slowTurret = true;
-  }
-
-  public void turretFast() {
-    slowTurret = false;
-  }
-
   public void turretAim(double turn) {
     //if (getAngleFromEncoder(turretEncoder)<90&&getAngleFromEncoder(turretEncoder)>-90) {
-      turretMotor.set(turn*1.0);
-    //}
-    //else if (getAngleFromEncoder(turretEncoder)>=90) {
-      //turretMotor.set(-(Math.abs(turn*0.3)));
-    //}
-    //else if (getAngleFromEncoder(turretEncoder)<=-90) {
-      //turretMotor.set(Math.abs(turn*0.3));
+      turretMotor.set(turn);
     //}
   }
 
-  public void turretAimSlow(double turn) {
-    //if (getAngleFromEncoder(turretEncoder)<90&&getAngleFromEncoder(turretEncoder)>-90) {
-      turretMotor.set(turn*0.3);
-    //}
-    //else if (getAngleFromEncoder(turretEncoder)>=90) {
-      //turretMotor.set(-(Math.abs(turn*0.3)));
-    //}
-    //else if (getAngleFromEncoder(turretEncoder)<=-90) {
-      //turretMotor.set(Math.abs(turn*0.3));
-    //}
-  }
+  
 
 
 

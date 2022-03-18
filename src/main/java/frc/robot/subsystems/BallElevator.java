@@ -22,7 +22,7 @@ public class BallElevator extends SubsystemBase{
     private RelativeEncoder upperElevatorEncoder = upperElevatorMotor.getEncoder();
     private RelativeEncoder shooterInputEncoder = shooterInputMotor.getEncoder();
 
-    private Relay ballKickerRelay = new Relay(BallElevatorConstants.kballKickerPort);
+    //private Relay ballKickerRelay = new Relay(BallElevatorConstants.kballKickerPort);
 
     DigitalInput ballLow = new DigitalInput(BallElevatorConstants.kBallSwitch0);
     DigitalInput ballHigh = new DigitalInput(BallElevatorConstants.kBallSwitch1);
@@ -53,17 +53,17 @@ public class BallElevator extends SubsystemBase{
 
     public void runShooterInputForward(){
         shooterInputMotor.set(0.5);
-        ballKickerRelay.set(Relay.Value.kForward);
+        //ballKickerRelay.set(Relay.Value.kForward);
     }
 
     public void runShooterInputReverse(){
         shooterInputMotor.set(-0.5);
-        ballKickerRelay.set(Relay.Value.kReverse);
+        //ballKickerRelay.set(Relay.Value.kReverse);
     }
 
     public void stopShooterInput(){
         shooterInputMotor.set(0.0);
-        ballKickerRelay.set(Relay.Value.kOff);
+        //ballKickerRelay.set(Relay.Value.kOff);
     }
 
 
