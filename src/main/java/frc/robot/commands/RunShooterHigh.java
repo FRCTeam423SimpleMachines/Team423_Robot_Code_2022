@@ -1,15 +1,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class RunLiftDown extends CommandBase{
+public class RunShooterHigh extends CommandBase{
     
-    LiftSubsystem m_lift;
+    ShooterSubsystem m_shooter;
+    int count = 0;
 
-    public RunLiftDown(LiftSubsystem lift) {
-        m_lift = lift;
-        addRequirements(m_lift);
+    public RunShooterHigh(ShooterSubsystem shooter) {
+        m_shooter = shooter;
+        addRequirements(shooter);
     }
 
 
@@ -20,8 +21,8 @@ public class RunLiftDown extends CommandBase{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_lift.RunDown();
-        m_lift.updateState();
+        m_shooter.RunShooter();
+        m_shooter.SetShooterMaxSpeed(0.75);
     }
 
     // Called once the command ends or is interrupted.
@@ -31,6 +32,11 @@ public class RunLiftDown extends CommandBase{
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        count++;
+        if (count >= 10){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -13,23 +13,40 @@ public class TurretSubsystem extends SubsystemBase {
   
   private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.kTurretMotorPort, MotorType.kBrushless);
   private RelativeEncoder turretEncoder = turretMotor.getEncoder();
-  //DigitalInput magLimitSwitch = new DigitalInput(TurretConstants.kTurrentSensorPort);
+  DigitalInput magLimitSwitch = new DigitalInput(TurretConstants.kTurrentSensorPort);
 
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem() {}
 
   public void turretAim(double turn) {
-    //if (getAngleFromEncoder(turretEncoder)<90&&getAngleFromEncoder(turretEncoder)>-90) {
+    if (turretEncoder.getPosition()<141.6 && turretEncoder.getPosition()>-129) {
       turretMotor.set(turn);
-    //}
+    }
+    else if (turretEncoder.getPosition()>=141.6) {
+      if (turn < 0) {
+        turretMotor.set(turn);
+      } else {
+        turretMotor.set(0.0);
+      }
+    }
+    else if (turretEncoder.getPosition()<=-129) {
+      if (turn > 0) {
+      turretMotor.set(turn);
+      } else {
+        turretMotor.set(0.0);
+      }
+    }
+    //turretMotor.set(turn);
   }
 
   
-
+ public void stopTurret() {
+   turretMotor.set(0.0);
+ }
 
 
   public double getAngleFromEncoder(RelativeEncoder encoder) {
-    return encoder.getPosition()/TurretConstants.CLICKS_PER_DEGREE;
+    return encoder.getPosition()*TurretConstants.CLICKS_PER_DEGREE;
   }
 
   public void logToDashboard() {
@@ -43,9 +60,9 @@ public class TurretSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     logToDashboard();
 
-    //if (magLimitSwitch.get()) {
-      //turretEncoder.setPosition(0.0);
-    //}
+    if (!magLimitSwitch.get()) {
+      turretEncoder.setPosition(0.0);
+    }
   }
 
   @Override

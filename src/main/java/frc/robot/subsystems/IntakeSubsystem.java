@@ -26,21 +26,29 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem() {}
 
   public void intakeUp() {
-    if (state != IntakeConstants.IntakeStates.TOP) {
-      intakeArmMotor.set(0.15);
-    } else {
-      intakeArmMotor.set(0.0);
-      intakeMotor.set(0.0);
-    }
+    //if (state != IntakeConstants.IntakeStates.TOP) {
+      intakeArmMotor.set(1.0);
+    //} else {
+      //intakeArmMotor.set(0.0);
+      //intakeMotor.set(0.0);
+    //}
   }
 
   public void intakeDown() {
-    if (state != IntakeConstants.IntakeStates.BOTTOM) {
-      intakeArmMotor.set(-0.15);
-    } else {
-      intakeArmMotor.set(0.0);
-      intakeMotor.set(1.0); 
-    }
+    //if (state != IntakeConstants.IntakeStates.BOTTOM) {
+      intakeArmMotor.set(-1.0);
+    //} else {
+      //intakeArmMotor.set(0.0);
+      //intakeMotor.set(1.0); 
+    //}
+  }
+
+  public void intakeRun() {
+    intakeMotor.set(1.0);
+  }
+
+  public void intakeStop() {
+    intakeMotor.set(0.0);
   }
 
   public void intakeArmStop() {
@@ -63,19 +71,23 @@ public class IntakeSubsystem extends SubsystemBase {
 
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void updateState() {
     if (!intakeBottom.get()) { 
       state = IntakeConstants.IntakeStates.BOTTOM;
       intakeArmEncoder.setPosition(0.0);
     }
-    else if (!intakeTop.get() || intakeArmEncoder.getPosition() >= 40) {
+    else if (!intakeTop.get() || intakeArmEncoder.getPosition()>=300) {
       state = IntakeConstants.IntakeStates.TOP;
     }
     else {
       state = IntakeConstants.IntakeStates.MIDDLE;
     }
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    updateState();
     logToDashboard();
   }
 

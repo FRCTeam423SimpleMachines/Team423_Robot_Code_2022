@@ -21,6 +21,7 @@ public class RunIntakeUp extends CommandBase{
     @Override
     public void execute() {
         m_intake.intakeUp();
+        m_intake.updateState();
     }
 
     // Called once the command ends or is interrupted.

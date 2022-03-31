@@ -13,13 +13,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
 import frc.robot.commands.DoNothingAuton;
 import frc.robot.commands.DriveDistanceProfiled;
+import frc.robot.commands.DumpAuton;
 import frc.robot.commands.RunElevator;
 import frc.robot.commands.RunIntakeDown;
 import frc.robot.commands.RunIntakeUp;
 import frc.robot.commands.RunLiftDown;
 import frc.robot.commands.RunLiftUp;
+import frc.robot.commands.RunShooterInput;
+import frc.robot.commands.ShootAuton;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
+import frc.robot.commands.TurretLock;
 import frc.robot.commands.TurretSlow;
 import frc.robot.subsystems.BallElevator;
 import frc.robot.subsystems.DriveTrainSubsystem;
@@ -93,9 +97,17 @@ public class RobotContainer {
     m_liftSubsystem.setDefaultCommand(new RunCommand(() 
     -> m_liftSubsystem.DontRun(), m_liftSubsystem));
 
+    m_ballElevator.setDefaultCommand(new RunCommand(() 
+    -> m_ballElevator.stopShooterInput() , m_ballElevator));
+
+    m_intakeSubsystem.setDefaultCommand(new RunCommand(()
+    -> m_intakeSubsystem.intakeArmStop(), m_intakeSubsystem));
+
     // Add commands to the autonomous command chooser
     m_chooser.setDefaultOption("Simple Auto", new SimpleAuton(m_driveTrainSubsystem));
     m_chooser.addOption("Do noothing", new DoNothingAuton(m_driveTrainSubsystem));
+    m_chooser.addOption("Drive back and Shoot Ball", new ShootAuton(m_driveTrainSubsystem, m_shooterSubsystem, m_ballElevator));
+    m_chooser.addOption("Dump Ball and drive back", new DumpAuton(m_driveTrainSubsystem, m_shooterSubsystem, m_ballElevator));
     //m_chooser.addOption("Complex Auto", m_complexAuto);
 
     // Put the chooser on the dashboard
@@ -174,7 +186,7 @@ public class RobotContainer {
     //-> m_ballElevator.EllavotorToggle(), m_ballElevator));
 
     new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
-      -> m_shooterSubsystem.SetShooterMaxSpeed(1.0), m_shooterSubsystem));
+      -> m_shooterSubsystem.SetShooterMaxSpeed(0.8), m_shooterSubsystem));
 
     new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
       -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
@@ -182,9 +194,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController2, 4).whenPressed(new InstantCommand(()
       -> m_shooterSubsystem.SetShooterMaxSpeed(0.3), m_shooterSubsystem));
 
-    new JoystickButton(m_driverController, 6).whenPressed(new RunIntakeUp(m_intakeSubsystem));
+    new JoystickButton(m_driverController, 6).whenHeld(new RunIntakeUp(m_intakeSubsystem));
 
-    new JoystickButton(m_driverController, 4).whenPressed(new RunIntakeDown(m_intakeSubsystem));
+    new JoystickButton(m_driverController, 4).whenHeld(new RunIntakeDown(m_intakeSubsystem));
 
       new JoystickButton(m_driverController, 2).whenPressed(new InstantCommand(()
       -> m_intakeSubsystem.intakeArmStop(), m_intakeSubsystem));
@@ -195,8 +207,15 @@ public class RobotContainer {
     new JoystickButton(m_driverController2, 12).whenHeld(new InstantCommand(()
       -> m_ballElevator.runElevatorForward(), m_ballElevator));
   
-    new JoystickButton(m_driverController2, 1).whenHeld(new InstantCommand(()
-      -> m_ballElevator.runShooterInputForward(), m_ballElevator));
+    new JoystickButton(m_driverController2, 1).whenHeld(new RunShooterInput(m_ballElevator));
+
+    new JoystickButton(m_driverController, 12).whenPressed(new InstantCommand(()
+    -> m_intakeSubsystem.intakeStop(), m_intakeSubsystem));
+
+    new JoystickButton(m_driverController, 10).whenPressed(new InstantCommand(()
+    -> m_intakeSubsystem.intakeRun(), m_intakeSubsystem));
+
+    new JoystickButton(m_driverController2, 6).whenHeld(new TurretLock(m_turretSubsystem));
 
     new JoystickButton(m_driverController2, 2).whenHeld(new TurretSlow(m_turretSubsystem, ()-> deadbandJoystick(m_driverController2.getZ())));
   }

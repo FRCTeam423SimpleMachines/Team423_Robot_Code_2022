@@ -48,10 +48,7 @@ public class LiftSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("Lift/Bottom Limit", bottomLimitSwitch.get());
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    
+  public void updateState(){
     if (!bottomLimitSwitch.get() || liftEncoder.getPosition() <= 0) {
       state = LiftStates.BOTTOM;
       liftEncoder.setPosition(0.0);
@@ -63,7 +60,12 @@ public class LiftSubsystem extends SubsystemBase {
     else {
       state = LiftStates.MIDDLE;
     }
+  }
 
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    updateState();
     logToDashboard();
   }
 

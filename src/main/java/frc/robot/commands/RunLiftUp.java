@@ -21,6 +21,7 @@ public class RunLiftUp extends CommandBase{
     @Override
     public void execute() {
         m_lift.RunUp();
+        m_lift.updateState();
     }
 
     // Called once the command ends or is interrupted.

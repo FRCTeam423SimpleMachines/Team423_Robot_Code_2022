@@ -64,7 +64,7 @@ public final class Constants {
     }
 
     public static final class TurretConstants {
-        public static final int kTurretMotorPort = 21;
+        public static final int kTurretMotorPort = 22;
         public static final int kTurrentSensorPort = 0;
 
         public static final int TURRET_GEAR_RATIO = 560;
@@ -83,7 +83,7 @@ public final class Constants {
     }
 
     public static final class BallElevatorConstants{
-      public static final int kLowerElevatorPort = 22;
+      public static final int kLowerElevatorPort = 21;
       public static final int kUpperElevatorPort = 23;
       public static final int kshooterInputPort = 24;
       public static final int kballKickerPort = 0;
