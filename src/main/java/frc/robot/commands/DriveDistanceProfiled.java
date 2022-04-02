@@ -76,7 +76,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
 
     // TODO Auto-generated method stub
     getController().reset(m_drive.getAvrageEncoderDistance());
-    double p = SmartDashboard.getNumber("Drive/P", Constants.DriveConstants.PROFILED_DRIVE_P);
+    double p = SmartDashboard.getNumber("DrivePID/P", Constants.DriveConstants.PROFILED_DRIVE_P);
     double i = SmartDashboard.getNumber("DrivePID/I", Constants.DriveConstants.PROFILED_DRIVE_I);
     double d = SmartDashboard.getNumber("DrivePID/D", Constants.DriveConstants.PROFILED_DRIVE_D);
     getController().setPID(p, i, d);
