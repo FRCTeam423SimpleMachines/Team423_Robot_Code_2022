@@ -25,6 +25,7 @@ import frc.robot.commands.RunLiftDown;
 import frc.robot.commands.RunLiftUp;
 import frc.robot.commands.RunShooterInput;
 import frc.robot.commands.ShootAuton;
+import frc.robot.commands.ShootBall;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.TurretLock;
@@ -182,17 +183,17 @@ public class RobotContainer {
     new JoystickButton(m_driverController, 8).whenPressed(new InstantCommand(()
       -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
 
-    new JoystickButton(m_driverController, 5).whenHeld(new RunLiftUp(m_liftSubsystem));
+    //new JoystickButton(m_driverController, 5).whenHeld(new RunLiftUp(m_liftSubsystem));
 
-    new JoystickButton(m_driverController, 3).whenHeld(new RunLiftDown(m_liftSubsystem));
+    //new JoystickButton(m_driverController, 3).whenHeld(new RunLiftDown(m_liftSubsystem));
 
-    //new JoystickButton(m_driverController2, 1).whenHeld(new ShootBall(m_ballElevator));
+    new JoystickButton(m_driverController2, 1).whenHeld(new ShootBall(m_ballElevator));
 
     //new JoystickButton(m_driverController2, 8).whenPressed(new InstantCommand(()
     //-> m_ballElevator.EllavotorToggle(), m_ballElevator));
 
-    new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
-      -> m_shooterSubsystem.SetShooterMaxSpeed(0.8), m_shooterSubsystem));
+    //new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
+      //-> m_shooterSubsystem.SetShooterMaxSpeed(0.8), m_shooterSubsystem));
 
     new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
       -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
