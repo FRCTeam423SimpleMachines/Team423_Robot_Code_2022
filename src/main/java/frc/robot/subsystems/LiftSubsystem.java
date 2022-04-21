@@ -5,6 +5,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LiftConstants;
@@ -22,7 +24,16 @@ public class LiftSubsystem extends SubsystemBase {
   private LiftConstants.LiftStates state = LiftConstants.LiftStates.BOTTOM;
 
   /** Creates a new ExampleSubsystem. */
-  public LiftSubsystem() {}
+  public LiftSubsystem() {
+    ShuffleboardTab liftTab = Shuffleboard.getTab("LiftTab");
+    liftTab.add("LiftTab", this);
+
+    liftTab.addNumber("Lift/Lift Position", () -> liftEncoder.getPosition());
+    liftTab.addNumber("Lift/Lift Speed", () -> liftEncoder.getVelocity());
+    liftTab.addString("Lift/Lift State", () -> state.toString());
+    liftTab.addBoolean("Lift/Top Limit", () -> topLimitSwitch.get());
+    liftTab.addBoolean("Lift/Bottom Limit", () -> bottomLimitSwitch.get());
+  }
 
   public void DontRun() {
       liftMotor.set(0.0);
@@ -41,11 +52,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void logToDashboard() {
-      SmartDashboard.putNumber("Lift/Lift Position", liftEncoder.getPosition());
-      SmartDashboard.putNumber("Lift/Lift Speed", liftEncoder.getVelocity());
-      SmartDashboard.putString("Lift/Lift State", state.toString());
-      SmartDashboard.putBoolean("Lift/Top Limit", topLimitSwitch.get());
-      SmartDashboard.putBoolean("Lift/Bottom Limit", bottomLimitSwitch.get());
+      
   }
 
   public void updateState(){

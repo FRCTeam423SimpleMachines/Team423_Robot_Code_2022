@@ -6,7 +6,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallElevatorConstants;
 import frc.robot.Constants.BallElevatorConstants.BallStates;
@@ -28,12 +29,21 @@ public class BallElevator extends SubsystemBase{
     DigitalInput ballHigh = new DigitalInput(BallElevatorConstants.kBallSwitch1);
 
     private BallElevatorConstants.BallStates BallState = BallStates.ZERO;
-    
+
   
     /** Creates a new ExampleSubsystem. */
     public BallElevator() {
         shooterInputMotor.setInverted(true);
         lowerElevatorMotor.setInverted(true);
+
+        ShuffleboardTab elevatorTab = Shuffleboard.getTab("BallElevator");
+        elevatorTab.add("BallElevator", this);
+
+        Shuffleboard.getTab("BallElevator").addNumber("Elevator/Lower Elevator Speed", () -> lowerElevatorEncoder.getVelocity());
+        Shuffleboard.getTab("BallElevator").addNumber("Elevator/Upper Elevator Speed", () -> upperElevatorEncoder.getVelocity());
+        Shuffleboard.getTab("BallElevator").addNumber("Elevator/Shooter Input Speed", () -> shooterInputEncoder.getVelocity());
+        elevatorTab.addString("Elevator/Ball Elevator State", () -> BallState.toString());
+    
     }
 
     public void runElevatorForward(){
@@ -86,10 +96,7 @@ public class BallElevator extends SubsystemBase{
   
   
     public void logToDashboard() {
-      SmartDashboard.putNumber("Lower Elevator Speed", lowerElevatorEncoder.getVelocity());
-      SmartDashboard.putNumber("Upper Elevator Speed", upperElevatorEncoder.getVelocity());
-      SmartDashboard.putNumber("Shooter Input Speed", shooterInputEncoder.getVelocity());
-      SmartDashboard.putString("Ball Elevator State", BallState.toString());
+      
     }
   
     @Override

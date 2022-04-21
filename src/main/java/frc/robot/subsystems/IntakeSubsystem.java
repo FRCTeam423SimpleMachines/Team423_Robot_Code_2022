@@ -5,6 +5,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -22,8 +25,19 @@ public class IntakeSubsystem extends SubsystemBase {
   DigitalInput intakeTop = new DigitalInput(IntakeConstants.kIntakeTopPort);
   DigitalInput intakeBottom = new DigitalInput(IntakeConstants.kIntakeBottomPort);
 
+  
+
+  
+
   /** Creates a new ExampleSubsystem. */
-  public IntakeSubsystem() {}
+  public IntakeSubsystem() {
+    ShuffleboardTab intakeTab = Shuffleboard.getTab("IntakeTab");
+
+    intakeTab.addNumber("Intake/Intake Arm Position", () -> intakeArmEncoder.getPosition());
+    intakeTab.addBoolean("Intake/Top", () -> intakeTop.get());
+    intakeTab.addBoolean("Intake/Bottom", () -> intakeBottom.get());
+    intakeTab.addString("Intake/State", () -> state.toString());
+  }
 
   public void intakeUp() {
     //if (state != IntakeConstants.IntakeStates.TOP) {
@@ -64,10 +78,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Intake/Intake Arm Position", intakeArmEncoder.getPosition());
-    SmartDashboard.putBoolean("Intake/Top", intakeTop.get());
-    SmartDashboard.putBoolean("Intake/Bottom", intakeBottom.get());
-    SmartDashboard.putString("Intake/State", state.toString());
+    
 
   }
 

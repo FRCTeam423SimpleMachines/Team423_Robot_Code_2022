@@ -124,14 +124,9 @@ public class RobotContainer {
     //ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
     //driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
 
-    ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-    shooterTab.add("Shooter", m_shooterSubsystem);
+    
 
-    ShuffleboardTab elevatorTab = Shuffleboard.getTab("Elevator");
-    elevatorTab.add("Elevator", m_ballElevator);
-
-    ShuffleboardTab liftTab = Shuffleboard.getTab("Lift");
-    liftTab.add("Lift", m_liftSubsystem);
+    
 
     // Put both encoders in a list layout
     //ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);

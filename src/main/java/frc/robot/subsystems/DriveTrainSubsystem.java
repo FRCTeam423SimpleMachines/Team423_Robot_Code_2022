@@ -65,16 +65,16 @@ public class DriveTrainSubsystem extends SubsystemBase{
         ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
         driveBaseTab.add("Arcade Drive", this);
 
-        Shuffleboard.getTab("Drivebase").add("Drive/Gyro Angle", mGyro.getAngle());
-        Shuffleboard.getTab("Drivebase").add("Drive/Gyro Pitch", mGyro.getPitch());
-        Shuffleboard.getTab("Drivebase").add("Drive/Gyro Roll", mGyro.getRoll());
-        Shuffleboard.getTab("Drivebase").add("Drive/Gyro Connected", mGyro.isConnected());
-        Shuffleboard.getTab("Drivebase").add("Drive/Left Wheel Speed in Inches per Second", m_encoderL.getVelocity());
-        Shuffleboard.getTab("Drivebase").add("Drive/Right Wheel Speed in Inches per Second", m_encoderR.getVelocity());
-        Shuffleboard.getTab("Drivebase").add("Drive/Left Wheel Distance in Inches", m_encoderL.getPosition());
-        Shuffleboard.getTab("Drivebase").add("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
-        Shuffleboard.getTab("Drivebase").add("Drive/Left and Right Wheel Distance in Inches", getAvrageEncoderDistance());
-        Shuffleboard.getTab("Drivebase").add("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Gyro Angle", () -> mGyro.getAngle());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Gyro Pitch", () -> mGyro.getPitch());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Gyro Roll", () -> mGyro.getRoll());
+        Shuffleboard.getTab("Drivebase").addBoolean("Drive/Gyro Connected", () -> mGyro.isConnected());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Left Wheel Speed in Inches per Second", () -> m_encoderL.getVelocity());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Right Wheel Speed in Inches per Second", () -> m_encoderR.getVelocity());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Left Wheel Distance in Inches", () -> m_encoderL.getPosition());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Right Wheel Distance in Inches", () -> m_encoderR.getPosition());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Left and Right Wheel Distance in Inches", () -> getAvrageEncoderDistance());
+        Shuffleboard.getTab("Drivebase").addNumber("Drive/Left Encoder Position Conversion Value", () -> m_encoderL.getPositionConversionFactor());
 
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
