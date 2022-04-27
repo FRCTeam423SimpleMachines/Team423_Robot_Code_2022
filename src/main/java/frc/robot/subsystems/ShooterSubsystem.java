@@ -2,6 +2,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -12,9 +17,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private double maxSpeed;
 
+    private boolean shooterSfty = false;
+
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     shooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+
+    ShuffleboardTab shooterTab = Shuffleboard.getTab("ShooterTab");
+    shooterTab.add("ShooterTab", this);
+
+    shooterTab.addNumber("Shooter/Shooter Max Speed", () -> maxSpeed);
+
+    NetworkTableEntry shooterSafety = shooterTab.add("Shooter Safety", shooterSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
   }
 
@@ -39,7 +53,12 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void RunShooter() {
-    shooterMotor.set(maxSpeed);
+    if (!shooterSfty) {
+      shooterMotor.set(maxSpeed);
+    }
+    else {
+      shooterMotor.set(0);
+    }
   }
 
   public void logToDashboard() {

@@ -4,9 +4,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallElevatorConstants;
 import frc.robot.Constants.BallElevatorConstants.BallStates;
@@ -28,37 +32,59 @@ public class BallElevator extends SubsystemBase{
     DigitalInput ballHigh = new DigitalInput(BallElevatorConstants.kBallSwitch1);
 
     private BallElevatorConstants.BallStates BallState = BallStates.ZERO;
-    
+
+    private boolean elevatorSfty = false;
   
     /** Creates a new ExampleSubsystem. */
     public BallElevator() {
         shooterInputMotor.setInverted(true);
         lowerElevatorMotor.setInverted(true);
+
+        ShuffleboardTab elevatorTab = Shuffleboard.getTab("BallElevator");
+        elevatorTab.add("BallElevator", this);
+
+        Shuffleboard.getTab("BallElevator").addNumber("Elevator/Lower Elevator Speed", () -> lowerElevatorEncoder.getVelocity());
+        Shuffleboard.getTab("BallElevator").addNumber("Elevator/Upper Elevator Speed", () -> upperElevatorEncoder.getVelocity());
+        Shuffleboard.getTab("BallElevator").addNumber("Elevator/Shooter Input Speed", () -> shooterInputEncoder.getVelocity());
+        elevatorTab.addString("Elevator/Ball Elevator State", () -> BallState.toString());
+
+        NetworkTableEntry elevatorSafety = elevatorTab.add("Elevator Safety", elevatorSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    
     }
 
     public void runElevatorForward(){
-        lowerElevatorMotor.set(0.5);
-        upperElevatorMotor.set(0.5);
+        if (!elevatorSfty) {
+            lowerElevatorMotor.set(0.5);
+            upperElevatorMotor.set(0.5);
+        }
     }
 
     public void runElevatorReverse(){
-        lowerElevatorMotor.set(-0.5);
-        upperElevatorMotor.set(-0.5);
+        if (!elevatorSfty) {
+            lowerElevatorMotor.set(-0.5);
+            upperElevatorMotor.set(-0.5);
+        }
     }
 
     public void stopElevator() {
-        lowerElevatorMotor.set(0.0);
-        upperElevatorMotor.set(0.0);
+        if (!elevatorSfty) {
+            lowerElevatorMotor.set(0.0);
+            upperElevatorMotor.set(0.0);
+        }
     }
 
     public void runShooterInputForward(){
-        shooterInputMotor.set(0.5);
-        //ballKickerRelay.set(Relay.Value.kForward);
+        if (!elevatorSfty) {
+            shooterInputMotor.set(0.5);
+            //ballKickerRelay.set(Relay.Value.kForward);
+        }
     }
 
     public void runShooterInputReverse(){
+        if (!elevatorSfty) {
         shooterInputMotor.set(-0.5);
         //ballKickerRelay.set(Relay.Value.kReverse);
+        }
     }
 
     public void stopShooterInput(){

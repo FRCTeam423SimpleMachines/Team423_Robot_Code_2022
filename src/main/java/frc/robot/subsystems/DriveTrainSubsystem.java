@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +16,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SerialPort;
 
 import frc.robot.Constants.DriveConstants;
@@ -43,8 +45,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
     private RelativeEncoder m_encoderL = leftMotor2.getEncoder();
     private RelativeEncoder m_encoderR = rightMotor2.getEncoder();
 
-
     private AHRS mGyro;
+
+    private boolean dirveSfty = false;
 
     /** Creates a new DriveSubsystem. */
     public DriveTrainSubsystem() {
@@ -62,6 +65,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
 
         leftMotor2.burnFlash();
         rightMotor2.burnFlash();
+
         ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
         driveBaseTab.add("Arcade Drive", this);
 
@@ -76,6 +80,8 @@ public class DriveTrainSubsystem extends SubsystemBase{
         Shuffleboard.getTab("Drivebase").add("Drive/Left and Right Wheel Distance in Inches", getAvrageEncoderDistance());
         Shuffleboard.getTab("Drivebase").add("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
 
+        NetworkTableEntry driveSafety = driveBaseTab.add("Drive Safety", dirveSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
         //m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -89,7 +95,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
      * @param rot the commanded rotation
      */
     public void arcadeDrive(double fwd, double rot) {
+      //if (!dirveSfty) {  
         m_drive.arcadeDrive(fwd, rot);
+      //}
     }
 
     public DifferentialDrive getDifferentialDrive() {

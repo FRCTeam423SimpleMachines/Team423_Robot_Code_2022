@@ -4,7 +4,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
@@ -15,10 +19,21 @@ public class TurretSubsystem extends SubsystemBase {
   private RelativeEncoder turretEncoder = turretMotor.getEncoder();
   DigitalInput magLimitSwitch = new DigitalInput(TurretConstants.kTurrentSensorPort);
 
+  private boolean turretSfty = false;
+
   /** Creates a new ExampleSubsystem. */
-  public TurretSubsystem() {}
+  public TurretSubsystem() {
+    ShuffleboardTab turretTab = Shuffleboard.getTab("TurretTab");
+
+    turretTab.addNumber("Turret/Turret Speed", () -> turretEncoder.getVelocity());
+    turretTab.addNumber("Turret/Turret Position", () -> turretEncoder.getPosition());
+    turretTab.addNumber("Turret/Turret Angle", () -> getAngleFromEncoder(turretEncoder));
+
+    NetworkTableEntry turretSafety = turretTab.add("Turret Safety", turretSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+  }
 
   public void turretAim(double turn) {
+    if (!turretSfty) {
     if (turretEncoder.getPosition()<141.6 && turretEncoder.getPosition()>-129) {
       turretMotor.set(turn);
     }
@@ -37,6 +52,7 @@ public class TurretSubsystem extends SubsystemBase {
       }
     }
     //turretMotor.set(turn);
+    }
   }
 
   
