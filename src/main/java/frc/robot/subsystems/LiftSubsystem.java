@@ -27,9 +27,11 @@ public class LiftSubsystem extends SubsystemBase {
 
   private boolean liftSfty = false;
 
+  ShuffleboardTab liftTab = Shuffleboard.getTab("LiftTab");
+  NetworkTableEntry liftSafety = liftTab.add("Lift Safety", liftSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+
   /** Creates a new ExampleSubsystem. */
   public LiftSubsystem() {
-    ShuffleboardTab liftTab = Shuffleboard.getTab("LiftTab");
     liftTab.add("LiftTab", this);
 
     liftTab.addNumber("Lift/Lift Position", () -> liftEncoder.getPosition());
@@ -37,8 +39,6 @@ public class LiftSubsystem extends SubsystemBase {
     liftTab.addString("Lift/Lift State", () -> state.toString());
     liftTab.addBoolean("Lift/Top Limit", () -> topLimitSwitch.get());
     liftTab.addBoolean("Lift/Bottom Limit", () -> bottomLimitSwitch.get());
-
-    NetworkTableEntry liftSafety = liftTab.add("Lift Safety", liftSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
   }
 
   public void DontRun() {
@@ -62,11 +62,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void logToDashboard() {
-      SmartDashboard.putNumber("Lift/Lift Position", liftEncoder.getPosition());
-      SmartDashboard.putNumber("Lift/Lift Speed", liftEncoder.getVelocity());
-      SmartDashboard.putString("Lift/Lift State", state.toString());
-      SmartDashboard.putBoolean("Lift/Top Limit", topLimitSwitch.get());
-      SmartDashboard.putBoolean("Lift/Bottom Limit", bottomLimitSwitch.get());
+      
   }
 
   public void updateState(){
@@ -93,5 +89,6 @@ public class LiftSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+    liftSfty = liftSafety.getBoolean(false);
   }
 }

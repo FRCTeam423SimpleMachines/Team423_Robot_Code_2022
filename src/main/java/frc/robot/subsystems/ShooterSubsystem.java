@@ -19,17 +19,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private boolean shooterSfty = false;
 
+    ShuffleboardTab shooterTab = Shuffleboard.getTab("ShooterTab");
+    NetworkTableEntry shooterSafety = shooterTab.add("Shooter Safety", shooterSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     shooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-    ShuffleboardTab shooterTab = Shuffleboard.getTab("ShooterTab");
     shooterTab.add("ShooterTab", this);
 
     shooterTab.addNumber("Shooter/Shooter Max Speed", () -> maxSpeed);
-
-    NetworkTableEntry shooterSafety = shooterTab.add("Shooter Safety", shooterSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
-
   }
 
   public void SetShooterMaxSpeed(double maxSpd) {
@@ -63,7 +62,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void logToDashboard() {
     //SmartDashboard.putNumber("Shooter/Shooter Speed (RPM)", shooterMotor.getSelectedSensorVelocity()/ShooterConstants.kencoderCPR);
-    SmartDashboard.putNumber("Shooter/Shooter Max Speed", maxSpeed);
+    //SmartDashboard.putNumber("Shooter/Shooter Max Speed", maxSpeed);
     
     
   }  
@@ -77,5 +76,6 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+    shooterSfty = shooterSafety.getBoolean(false);
   }
 }

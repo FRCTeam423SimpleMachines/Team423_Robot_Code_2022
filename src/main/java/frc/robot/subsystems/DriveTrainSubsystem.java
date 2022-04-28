@@ -49,6 +49,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
 
     private boolean dirveSfty = false;
 
+    ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
+    NetworkTableEntry driveSafety = driveBaseTab.add("Drive Safety", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+
     /** Creates a new DriveSubsystem. */
     public DriveTrainSubsystem() {
         // We need to invert one side of the drivetrain so that positive voltages
@@ -66,7 +69,6 @@ public class DriveTrainSubsystem extends SubsystemBase{
         leftMotor2.burnFlash();
         rightMotor2.burnFlash();
 
-        ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
         driveBaseTab.add("Arcade Drive", this);
 
         Shuffleboard.getTab("Drivebase").add("Drive/Gyro Angle", mGyro.getAngle());
@@ -79,8 +81,6 @@ public class DriveTrainSubsystem extends SubsystemBase{
         Shuffleboard.getTab("Drivebase").add("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
         Shuffleboard.getTab("Drivebase").add("Drive/Left and Right Wheel Distance in Inches", getAvrageEncoderDistance());
         Shuffleboard.getTab("Drivebase").add("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
-
-        NetworkTableEntry driveSafety = driveBaseTab.add("Drive Safety", dirveSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -238,6 +238,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
   
       // mOdometry.update(getHeading(), getDifferentialDriveSpeed());
       // mInvertedOdometry.update(getHeading(), getInvertedDifferentialDriveSpeed());
+      dirveSfty = driveSafety.getBoolean(false);
       logToDashboard();
     }
 

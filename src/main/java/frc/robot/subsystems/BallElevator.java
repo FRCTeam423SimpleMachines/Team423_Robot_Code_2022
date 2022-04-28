@@ -34,13 +34,15 @@ public class BallElevator extends SubsystemBase{
     private BallElevatorConstants.BallStates BallState = BallStates.ZERO;
 
     private boolean elevatorSfty = false;
+
+    ShuffleboardTab elevatorTab = Shuffleboard.getTab("BallElevator");
+    NetworkTableEntry elevatorSafety = elevatorTab.add("Elevator Safety", elevatorSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
   
     /** Creates a new ExampleSubsystem. */
     public BallElevator() {
         shooterInputMotor.setInverted(true);
         lowerElevatorMotor.setInverted(true);
 
-        ShuffleboardTab elevatorTab = Shuffleboard.getTab("BallElevator");
         elevatorTab.add("BallElevator", this);
 
         Shuffleboard.getTab("BallElevator").addNumber("Elevator/Lower Elevator Speed", () -> lowerElevatorEncoder.getVelocity());
@@ -48,7 +50,7 @@ public class BallElevator extends SubsystemBase{
         Shuffleboard.getTab("BallElevator").addNumber("Elevator/Shooter Input Speed", () -> shooterInputEncoder.getVelocity());
         elevatorTab.addString("Elevator/Ball Elevator State", () -> BallState.toString());
 
-        NetworkTableEntry elevatorSafety = elevatorTab.add("Elevator Safety", elevatorSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+        
     
     }
 
@@ -112,10 +114,7 @@ public class BallElevator extends SubsystemBase{
   
   
     public void logToDashboard() {
-      SmartDashboard.putNumber("Lower Elevator Speed", lowerElevatorEncoder.getVelocity());
-      SmartDashboard.putNumber("Upper Elevator Speed", upperElevatorEncoder.getVelocity());
-      SmartDashboard.putNumber("Shooter Input Speed", shooterInputEncoder.getVelocity());
-      SmartDashboard.putString("Ball Elevator State", BallState.toString());
+      
     }
   
     @Override
@@ -128,6 +127,7 @@ public class BallElevator extends SubsystemBase{
     @Override
     public void simulationPeriodic() {
       // This method will be called once per scheduler run during simulation
+      elevatorSfty = elevatorSafety.getBoolean(false);
     }
 
 

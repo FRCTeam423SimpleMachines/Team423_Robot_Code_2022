@@ -21,15 +21,16 @@ public class TurretSubsystem extends SubsystemBase {
 
   private boolean turretSfty = false;
 
+  ShuffleboardTab turretTab = Shuffleboard.getTab("TurretTab");
+  NetworkTableEntry turretSafety = turretTab.add("Turret Safety", turretSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem() {
-    ShuffleboardTab turretTab = Shuffleboard.getTab("TurretTab");
+    
 
     turretTab.addNumber("Turret/Turret Speed", () -> turretEncoder.getVelocity());
     turretTab.addNumber("Turret/Turret Position", () -> turretEncoder.getPosition());
     turretTab.addNumber("Turret/Turret Angle", () -> getAngleFromEncoder(turretEncoder));
-
-    NetworkTableEntry turretSafety = turretTab.add("Turret Safety", turretSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
   }
 
   public void turretAim(double turn) {
@@ -66,9 +67,9 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Turret/Turret Speed", turretEncoder.getVelocity());
-    SmartDashboard.putNumber("Turret/Turret Position", turretEncoder.getPosition());
-    SmartDashboard.putNumber("Turret/Turret Angle", getAngleFromEncoder(turretEncoder));
+    //SmartDashboard.putNumber("Turret/Turret Speed", turretEncoder.getVelocity());
+    //SmartDashboard.putNumber("Turret/Turret Position", turretEncoder.getPosition());
+    //SmartDashboard.putNumber("Turret/Turret Angle", getAngleFromEncoder(turretEncoder));
   }
 
   @Override
@@ -84,5 +85,6 @@ public class TurretSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+    turretSfty = turretSafety.getBoolean(false);
   }
 }

@@ -30,18 +30,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private boolean intakeSfty = false; 
 
-  
+  ShuffleboardTab intakeTab = Shuffleboard.getTab("IntakeTab");
+  NetworkTableEntry intakeSafety = intakeTab.add("Intake Safety", intakeSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
   /** Creates a new ExampleSubsystem. */
   public IntakeSubsystem() {
-    ShuffleboardTab intakeTab = Shuffleboard.getTab("IntakeTab");
-
     intakeTab.addNumber("Intake/Intake Arm Position", () -> intakeArmEncoder.getPosition());
     intakeTab.addBoolean("Intake/Top", () -> intakeTop.get());
     intakeTab.addBoolean("Intake/Bottom", () -> intakeBottom.get());
     intakeTab.addString("Intake/State", () -> state.toString());
-
-    NetworkTableEntry intakeSafety = intakeTab.add("Intake Safety", intakeSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
   }
 
   public void intakeUp() {
@@ -89,10 +86,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void logToDashboard() {
-    SmartDashboard.putNumber("Intake/Intake Arm Position", intakeArmEncoder.getPosition());
-    SmartDashboard.putBoolean("Intake/Top", intakeTop.get());
-    SmartDashboard.putBoolean("Intake/Bottom", intakeBottom.get());
-    SmartDashboard.putString("Intake/State", state.toString());
+   
 
   }
 
@@ -119,5 +113,6 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+    intakeSfty = intakeSafety.getBoolean(false);
   }
 }
