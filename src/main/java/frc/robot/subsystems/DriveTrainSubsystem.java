@@ -95,9 +95,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
      * @param rot the commanded rotation
      */
     public void arcadeDrive(double fwd, double rot) {
-      //if (!dirveSfty) {  
+      if (!dirveSfty) {  
         m_drive.arcadeDrive(fwd, rot);
-      //}
+      }
     }
 
     public DifferentialDrive getDifferentialDrive() {
