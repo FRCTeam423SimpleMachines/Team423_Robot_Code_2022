@@ -108,11 +108,12 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     updateState();
     logToDashboard();
+    intakeSfty = intakeSafety.getBoolean(false);
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-    intakeSfty = intakeSafety.getBoolean(false);
+    
   }
 }

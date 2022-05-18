@@ -122,12 +122,13 @@ public class BallElevator extends SubsystemBase{
       // This method will be called once per scheduler run
       updateBallState();
       logToDashboard();
+      elevatorSfty = elevatorSafety.getBoolean(false);
     }
   
     @Override
     public void simulationPeriodic() {
       // This method will be called once per scheduler run during simulation
-      elevatorSfty = elevatorSafety.getBoolean(false);
+      
     }
 
 

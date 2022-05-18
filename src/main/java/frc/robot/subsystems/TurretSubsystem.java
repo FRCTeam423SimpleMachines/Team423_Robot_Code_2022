@@ -76,6 +76,7 @@ public class TurretSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     logToDashboard();
+    turretSfty = turretSafety.getBoolean(false);
 
     if (!magLimitSwitch.get()) {
       turretEncoder.setPosition(0.0);
@@ -85,6 +86,6 @@ public class TurretSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-    turretSfty = turretSafety.getBoolean(false);
+    
   }
 }

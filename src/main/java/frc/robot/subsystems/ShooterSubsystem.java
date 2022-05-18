@@ -71,11 +71,12 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     logToDashboard();
+    shooterSfty = shooterSafety.getBoolean(false);
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-    shooterSfty = shooterSafety.getBoolean(false);
+    
   }
 }

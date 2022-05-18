@@ -84,11 +84,12 @@ public class LiftSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     updateState();
     logToDashboard();
+    liftSfty = liftSafety.getBoolean(false);
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-    liftSfty = liftSafety.getBoolean(false);
+    
   }
 }
