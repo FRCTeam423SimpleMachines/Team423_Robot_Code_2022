@@ -47,10 +47,10 @@ public class DriveTrainSubsystem extends SubsystemBase{
 
     private AHRS mGyro;
 
-    private boolean dirveSfty = false;
+    private boolean dirveSfty = true;
 
     ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
-    NetworkTableEntry driveSafety = driveBaseTab.add("Drive Safety", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    NetworkTableEntry driveSafety = Shuffleboard.getTab("Safeties").add("Drive Safety", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
     /** Creates a new DriveSubsystem. */
     public DriveTrainSubsystem() {
@@ -95,7 +95,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
      * @param rot the commanded rotation
      */
     public void arcadeDrive(double fwd, double rot) {
-      if (!dirveSfty) {  
+      if (dirveSfty) {  
         m_drive.arcadeDrive(fwd, rot);
       }
     }
@@ -238,7 +238,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
   
       // mOdometry.update(getHeading(), getDifferentialDriveSpeed());
       // mInvertedOdometry.update(getHeading(), getInvertedDifferentialDriveSpeed());
-      dirveSfty = driveSafety.getBoolean(false);
+      dirveSfty = driveSafety.getBoolean(true);
       logToDashboard();
     }
 

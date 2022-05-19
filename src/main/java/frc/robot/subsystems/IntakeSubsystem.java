@@ -28,10 +28,10 @@ public class IntakeSubsystem extends SubsystemBase {
   DigitalInput intakeTop = new DigitalInput(IntakeConstants.kIntakeTopPort);
   DigitalInput intakeBottom = new DigitalInput(IntakeConstants.kIntakeBottomPort);
 
-  private boolean intakeSfty = false; 
+  private boolean intakeSfty = true; 
 
   ShuffleboardTab intakeTab = Shuffleboard.getTab("IntakeTab");
-  NetworkTableEntry intakeSafety = intakeTab.add("Intake Safety", intakeSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+  NetworkTableEntry intakeSafety = Shuffleboard.getTab("Safeties").add("Intake Safety", intakeSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
   /** Creates a new ExampleSubsystem. */
   public IntakeSubsystem() {
@@ -42,7 +42,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void intakeUp() {
-    if (!intakeSfty) {
+    if (intakeSfty) {
     //if (state != IntakeConstants.IntakeStates.TOP) {
       intakeArmMotor.set(1.0);
     //} else {
@@ -53,7 +53,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void intakeDown() {
-    if (!intakeSfty) {
+    if (intakeSfty) {
     //if (state != IntakeConstants.IntakeStates.BOTTOM) {
       intakeArmMotor.set(-1.0);
     //} else {
@@ -64,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void intakeRun() {
-    if (!intakeSfty) {
+    if (intakeSfty) {
     intakeMotor.set(1.0);
     }
   }
@@ -108,7 +108,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     updateState();
     logToDashboard();
-    intakeSfty = intakeSafety.getBoolean(false);
+    intakeSfty = intakeSafety.getBoolean(true);
   }
 
   @Override

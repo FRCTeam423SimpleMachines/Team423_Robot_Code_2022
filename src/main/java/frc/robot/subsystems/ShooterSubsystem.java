@@ -17,10 +17,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private double maxSpeed;
 
-    private boolean shooterSfty = false;
+    private boolean shooterSfty = true;
 
     ShuffleboardTab shooterTab = Shuffleboard.getTab("ShooterTab");
-    NetworkTableEntry shooterSafety = shooterTab.add("Shooter Safety", shooterSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    NetworkTableEntry shooterSafety = Shuffleboard.getTab("Safeties").add("Shooter Safety", shooterSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -52,7 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void RunShooter() {
-    if (!shooterSfty) {
+    if (shooterSfty) {
       shooterMotor.set(maxSpeed);
     }
     else {
@@ -71,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     logToDashboard();
-    shooterSfty = shooterSafety.getBoolean(false);
+    shooterSfty = shooterSafety.getBoolean(true);
   }
 
   @Override

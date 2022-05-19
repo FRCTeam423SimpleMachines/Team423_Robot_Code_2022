@@ -25,10 +25,10 @@ public class LiftSubsystem extends SubsystemBase {
 
   private LiftConstants.LiftStates state = LiftConstants.LiftStates.BOTTOM;
 
-  private boolean liftSfty = false;
+  private boolean liftSfty = true;
 
   ShuffleboardTab liftTab = Shuffleboard.getTab("LiftTab");
-  NetworkTableEntry liftSafety = liftTab.add("Lift Safety", liftSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+  NetworkTableEntry liftSafety = Shuffleboard.getTab("Safeties").add("Lift Safety", liftSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
   /** Creates a new ExampleSubsystem. */
   public LiftSubsystem() {
@@ -46,7 +46,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void RunUp() {
-    if (!liftSfty) {
+    if (liftSfty) {
       if (state != LiftStates.TOP) {
         liftMotor.set(0.8);
       }
@@ -54,7 +54,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
   
   public void RunDown() {
-    if (!liftSfty) {
+    if (liftSfty) {
       if (state != LiftStates.BOTTOM) {
         liftMotor.set(-0.8);
       }
@@ -84,7 +84,7 @@ public class LiftSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     updateState();
     logToDashboard();
-    liftSfty = liftSafety.getBoolean(false);
+    liftSfty = liftSafety.getBoolean(true);
   }
 
   @Override

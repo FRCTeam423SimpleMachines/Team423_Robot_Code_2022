@@ -19,10 +19,10 @@ public class TurretSubsystem extends SubsystemBase {
   private RelativeEncoder turretEncoder = turretMotor.getEncoder();
   DigitalInput magLimitSwitch = new DigitalInput(TurretConstants.kTurrentSensorPort);
 
-  private boolean turretSfty = false;
+  private boolean turretSfty = true;
 
   ShuffleboardTab turretTab = Shuffleboard.getTab("TurretTab");
-  NetworkTableEntry turretSafety = turretTab.add("Turret Safety", turretSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+  NetworkTableEntry turretSafety = Shuffleboard.getTab("Safeties").add("Turret Safety", turretSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem() {
@@ -34,7 +34,7 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public void turretAim(double turn) {
-    if (!turretSfty) {
+    if (turretSfty) {
     if (turretEncoder.getPosition()<141.6 && turretEncoder.getPosition()>-129) {
       turretMotor.set(turn);
     }
@@ -76,7 +76,7 @@ public class TurretSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     logToDashboard();
-    turretSfty = turretSafety.getBoolean(false);
+    turretSfty = turretSafety.getBoolean(true);
 
     if (!magLimitSwitch.get()) {
       turretEncoder.setPosition(0.0);

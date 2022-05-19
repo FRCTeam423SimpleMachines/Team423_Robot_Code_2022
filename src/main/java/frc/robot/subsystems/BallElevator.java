@@ -33,10 +33,10 @@ public class BallElevator extends SubsystemBase{
 
     private BallElevatorConstants.BallStates BallState = BallStates.ZERO;
 
-    private boolean elevatorSfty = false;
+    private boolean elevatorSfty = true;
 
     ShuffleboardTab elevatorTab = Shuffleboard.getTab("BallElevator");
-    NetworkTableEntry elevatorSafety = elevatorTab.add("Elevator Safety", elevatorSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    NetworkTableEntry elevatorSafety = Shuffleboard.getTab("Safeties").add("Elevator Safety", elevatorSfty).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
   
     /** Creates a new ExampleSubsystem. */
     public BallElevator() {
@@ -55,35 +55,35 @@ public class BallElevator extends SubsystemBase{
     }
 
     public void runElevatorForward(){
-        if (!elevatorSfty) {
+        if (elevatorSfty) {
             lowerElevatorMotor.set(0.5);
             upperElevatorMotor.set(0.5);
         }
     }
 
     public void runElevatorReverse(){
-        if (!elevatorSfty) {
+        if (elevatorSfty) {
             lowerElevatorMotor.set(-0.5);
             upperElevatorMotor.set(-0.5);
         }
     }
 
     public void stopElevator() {
-        if (!elevatorSfty) {
+        if (elevatorSfty) {
             lowerElevatorMotor.set(0.0);
             upperElevatorMotor.set(0.0);
         }
     }
 
     public void runShooterInputForward(){
-        if (!elevatorSfty) {
+        if (elevatorSfty) {
             shooterInputMotor.set(0.5);
             //ballKickerRelay.set(Relay.Value.kForward);
         }
     }
 
     public void runShooterInputReverse(){
-        if (!elevatorSfty) {
+        if (elevatorSfty) {
         shooterInputMotor.set(-0.5);
         //ballKickerRelay.set(Relay.Value.kReverse);
         }
@@ -122,7 +122,7 @@ public class BallElevator extends SubsystemBase{
       // This method will be called once per scheduler run
       updateBallState();
       logToDashboard();
-      elevatorSfty = elevatorSafety.getBoolean(false);
+      elevatorSfty = elevatorSafety.getBoolean(true);
     }
   
     @Override

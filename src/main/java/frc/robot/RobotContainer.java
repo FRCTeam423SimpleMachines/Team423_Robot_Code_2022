@@ -183,9 +183,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, 8).whenPressed(new InstantCommand(()
       -> m_driveTrainSubsystem.resetGyro(), m_driveTrainSubsystem));
 
-    //new JoystickButton(m_driverController, 5).whenHeld(new RunLiftUp(m_liftSubsystem));
+    new JoystickButton(m_driverController, 5).whenHeld(new RunLiftUp(m_liftSubsystem));
 
-    //new JoystickButton(m_driverController, 3).whenHeld(new RunLiftDown(m_liftSubsystem));
+    new JoystickButton(m_driverController, 3).whenHeld(new RunLiftDown(m_liftSubsystem));
 
     new JoystickButton(m_driverController2, 1).whenHeld(new ShootBall(m_ballElevator));
 
@@ -214,7 +214,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController2, 12).whenHeld(new InstantCommand(()
       -> m_ballElevator.runElevatorForward(), m_ballElevator));
   
-    new JoystickButton(m_driverController2, 1).whenHeld(new RunShooterInput(m_ballElevator));
+    new JoystickButton(m_driverController2, 1).whileHeld(new RunShooterInput(m_ballElevator));
 
     new JoystickButton(m_driverController, 12).whenPressed(new InstantCommand(()
     -> m_intakeSubsystem.intakeStop(), m_intakeSubsystem));
