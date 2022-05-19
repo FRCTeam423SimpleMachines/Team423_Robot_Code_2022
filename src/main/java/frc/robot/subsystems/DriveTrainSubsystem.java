@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -13,6 +16,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SerialPort;
 
 import frc.robot.Constants.DriveConstants;
@@ -41,8 +45,12 @@ public class DriveTrainSubsystem extends SubsystemBase{
     private RelativeEncoder m_encoderL = leftMotor2.getEncoder();
     private RelativeEncoder m_encoderR = rightMotor2.getEncoder();
 
-
     private AHRS mGyro;
+
+    private boolean dirveSfty = true;
+
+    ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
+    NetworkTableEntry driveSafety = Shuffleboard.getTab("Safeties").add("Drive Safety", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
     /** Creates a new DriveSubsystem. */
     public DriveTrainSubsystem() {
@@ -61,6 +69,19 @@ public class DriveTrainSubsystem extends SubsystemBase{
         leftMotor2.burnFlash();
         rightMotor2.burnFlash();
 
+        driveBaseTab.add("Arcade Drive", this);
+
+        Shuffleboard.getTab("Drivebase").add("Drive/Gyro Angle", mGyro.getAngle());
+        Shuffleboard.getTab("Drivebase").add("Drive/Gyro Pitch", mGyro.getPitch());
+        Shuffleboard.getTab("Drivebase").add("Drive/Gyro Roll", mGyro.getRoll());
+        Shuffleboard.getTab("Drivebase").add("Drive/Gyro Connected", mGyro.isConnected());
+        Shuffleboard.getTab("Drivebase").add("Drive/Left Wheel Speed in Inches per Second", m_encoderL.getVelocity());
+        Shuffleboard.getTab("Drivebase").add("Drive/Right Wheel Speed in Inches per Second", m_encoderR.getVelocity());
+        Shuffleboard.getTab("Drivebase").add("Drive/Left Wheel Distance in Inches", m_encoderL.getPosition());
+        Shuffleboard.getTab("Drivebase").add("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
+        Shuffleboard.getTab("Drivebase").add("Drive/Left and Right Wheel Distance in Inches", getAvrageEncoderDistance());
+        Shuffleboard.getTab("Drivebase").add("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
+
         // Sets the distance per pulse for the encoders
         //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
         //m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -74,7 +95,9 @@ public class DriveTrainSubsystem extends SubsystemBase{
      * @param rot the commanded rotation
      */
     public void arcadeDrive(double fwd, double rot) {
+      if (dirveSfty) {  
         m_drive.arcadeDrive(fwd, rot);
+      }
     }
 
     public DifferentialDrive getDifferentialDrive() {
@@ -181,24 +204,25 @@ public class DriveTrainSubsystem extends SubsystemBase{
 
     public void logToDashboard() {
       // SmartDashboard.putBoolean("Turn Dampening", getTurnDampening());
-      SmartDashboard.putNumber("Drive/Gyro Angle", mGyro.getAngle());
-      SmartDashboard.putNumber("Drive/Gyro Pitch", mGyro.getPitch());
-      SmartDashboard.putNumber("Drive/Gyro Roll", mGyro.getRoll());
-      SmartDashboard.putBoolean("Drive/Gyro Connected", mGyro.isConnected());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Gyro Angle", mGyro.getAngle());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Gyro Pitch", mGyro.getPitch());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Gyro Roll", mGyro.getRoll());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Gyro Connected", mGyro.isConnected());
       //SmartDashboard.putNumber("Drive/Left Motors Speed Percent", getLeftDriveSpeedPercent());
       //SmartDashboard.putNumber("Drive/Right Motors Speed Percent", getRightDriveSpeedPercent());
       //SmartDashboard.putNumber("Drive/Degree Rotation From Start", getRotationInDegrees());
       //SmartDashboard.putNumber("Drive/Translation On X Since Start", getTranslationX());
       //SmartDashboard.putNumber("Drive/Translation on Y Since Start", getTranslationY());
-      SmartDashboard.putNumber("Drive/Left Wheel Speed in Inches per Second", m_encoderL.getVelocity());
-      SmartDashboard.putNumber("Drive/Right Wheel Speed in Inches per Second", m_encoderR.getVelocity());
-      SmartDashboard.putNumber("Drive/Left Wheel Distance in Inches", m_encoderL.getPosition());
-      SmartDashboard.putNumber("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
-      SmartDashboard.putNumber("Drive/Left and Right Wheel Distance in Inches", getAvrageEncoderDistance());
-      SmartDashboard.putNumber("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Left Wheel Speed in Inches per Second", m_encoderL.getVelocity());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Right Wheel Speed in Inches per Second", m_encoderR.getVelocity());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Left Wheel Distance in Inches", m_encoderL.getPosition());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Right Wheel Distance in Inches", m_encoderR.getPosition());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Left and Right Wheel Distance in Inches", getAvrageEncoderDistance());
+      //Shuffleboard.getTab("Drivebase").add("Drive/Left Encoder Position Conversion Value", m_encoderL.getPositionConversionFactor());
       //SmartDashboard.putNumber("Drive/X Translation", mOdometry.getPoseMeters().getTranslation().getX());
       //SmartDashboard.putNumber("Drive/Y Translation", mOdometry.getPoseMeters().getTranslation().getY());
       //SmartDashboard.putNumber("Drive/Pose Angle", mOdometry.getPoseMeters().getRotation().getDegrees());
+      
     }
   
     @Override
@@ -214,6 +238,7 @@ public class DriveTrainSubsystem extends SubsystemBase{
   
       // mOdometry.update(getHeading(), getDifferentialDriveSpeed());
       // mInvertedOdometry.update(getHeading(), getInvertedDifferentialDriveSpeed());
+      dirveSfty = driveSafety.getBoolean(true);
       logToDashboard();
     }
 

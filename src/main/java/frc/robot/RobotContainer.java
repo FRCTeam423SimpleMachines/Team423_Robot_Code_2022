@@ -6,10 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.*;
 import frc.robot.commands.DoNothingAuton;
 import frc.robot.commands.DriveDistanceProfiled;
@@ -21,6 +25,7 @@ import frc.robot.commands.RunLiftDown;
 import frc.robot.commands.RunLiftUp;
 import frc.robot.commands.RunShooterInput;
 import frc.robot.commands.ShootAuton;
+import frc.robot.commands.ShootBall;
 import frc.robot.commands.SimpleAuton;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.TurretLock;
@@ -51,8 +56,7 @@ public class RobotContainer {
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   private final BallElevator m_ballElevator = new BallElevator();
 
-
-
+  // Safeties for the robot's subsysytems
 
   /// 
   // The autonomous routines
@@ -85,15 +89,18 @@ public class RobotContainer {
 
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
+    
     m_driveTrainSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(0.9*squareInput(deadbandJoystick(m_driverController.getY())), -0.9*m_driverController.getZ() ), m_driveTrainSubsystem)
+    new RunCommand(() -> m_driveTrainSubsystem.arcadeDrive(0.9*squareInput(deadbandJoystick(m_driverController.getY())), -0.9*m_driverController.getZ() ), m_driveTrainSubsystem)
     );
+    
     m_shooterSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
+    new RunCommand(() -> m_shooterSubsystem.RunShooter(), m_shooterSubsystem)
     );
+    
     m_turretSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem)
-    );
+    new RunCommand(() -> m_turretSubsystem.turretAim(deadbandJoystick(m_driverController2.getZ())), m_turretSubsystem));
+    
     m_liftSubsystem.setDefaultCommand(new RunCommand(() 
     -> m_liftSubsystem.DontRun(), m_liftSubsystem));
 
@@ -105,7 +112,7 @@ public class RobotContainer {
 
     // Add commands to the autonomous command chooser
     m_chooser.setDefaultOption("Simple Auto", new SimpleAuton(m_driveTrainSubsystem));
-    m_chooser.addOption("Do noothing", new DoNothingAuton(m_driveTrainSubsystem));
+    m_chooser.addOption("Do Nothing", new DoNothingAuton(m_driveTrainSubsystem));
     m_chooser.addOption("Drive back and Shoot Ball", new ShootAuton(m_driveTrainSubsystem, m_shooterSubsystem, m_ballElevator));
     m_chooser.addOption("Dump Ball and drive back", new DumpAuton(m_driveTrainSubsystem, m_shooterSubsystem, m_ballElevator));
     //m_chooser.addOption("Complex Auto", m_complexAuto);
@@ -114,8 +121,8 @@ public class RobotContainer {
     Shuffleboard.getTab("Autonomous").add(m_chooser);
     
     // Add Info Graphs on the dashboard
-    ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
-    driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
+    //ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
+    //driveBaseTab.add("Arcade Drive", m_driveTrainSubsystem);
 
     ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
     shooterTab.add("Shooter", m_shooterSubsystem);
@@ -127,9 +134,9 @@ public class RobotContainer {
     liftTab.add("Lift", m_liftSubsystem);
 
     // Put both encoders in a list layout
-    ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
-    encoders.add("Left Encoder", m_driveTrainSubsystem.getLeftEncoderDistance());
-    encoders.add("Right Encoder", m_driveTrainSubsystem.getRightEncoderDistance());
+    //ShuffleboardLayout encoders = driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
+    //encoders.add("Left Encoder", m_driveTrainSubsystem.getLeftEncoderDistance());
+    //encoders.add("Right Encoder", m_driveTrainSubsystem.getRightEncoderDistance());
 
 
   }
@@ -180,13 +187,13 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, 3).whenHeld(new RunLiftDown(m_liftSubsystem));
 
-    //new JoystickButton(m_driverController2, 1).whenHeld(new ShootBall(m_ballElevator));
+    new JoystickButton(m_driverController2, 1).whenHeld(new ShootBall(m_ballElevator));
 
     //new JoystickButton(m_driverController2, 8).whenPressed(new InstantCommand(()
     //-> m_ballElevator.EllavotorToggle(), m_ballElevator));
 
-    new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
-      -> m_shooterSubsystem.SetShooterMaxSpeed(0.8), m_shooterSubsystem));
+    //new JoystickButton(m_driverController2, 5).whenPressed(new InstantCommand(()
+      //-> m_shooterSubsystem.SetShooterMaxSpeed(0.8), m_shooterSubsystem));
 
     new JoystickButton(m_driverController2, 3).whenPressed(new InstantCommand(()
       -> m_shooterSubsystem.SetShooterMaxSpeed(0.0), m_shooterSubsystem));
@@ -207,7 +214,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController2, 12).whenHeld(new InstantCommand(()
       -> m_ballElevator.runElevatorForward(), m_ballElevator));
   
-    new JoystickButton(m_driverController2, 1).whenHeld(new RunShooterInput(m_ballElevator));
+    new JoystickButton(m_driverController2, 1).whileHeld(new RunShooterInput(m_ballElevator));
 
     new JoystickButton(m_driverController, 12).whenPressed(new InstantCommand(()
     -> m_intakeSubsystem.intakeStop(), m_intakeSubsystem));

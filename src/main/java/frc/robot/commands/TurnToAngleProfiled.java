@@ -99,7 +99,7 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
     SmartDashboard.putNumber("TurnPID/VelError", getController().getVelocityError());
     SmartDashboard.putNumber("TurnPID/Goal", getController().getGoal().position);
     SmartDashboard.putNumber("TurnPID/Setpoint", getController().getSetpoint().position);
-    SmartDashboard.putNumber("TurnPID/Supplied Angle", m_drive.getHeading().getDegrees());
+    //SmartDashboard.putNumber("TurnPID/Supplied Angle", m_drive.getHeading().getDegrees());
     SmartDashboard.putNumber("TurnPID/Output", getController().calculate(m_drive.getHeading().getDegrees()));
     SmartDashboard.putNumber("TurnPID/Count", count);
     
